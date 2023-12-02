@@ -1,2 +1,16 @@
 .terraform
 .decrypted~*
+
+.DS_Store
+
+roles*
+config.yml
+ansible.cfg
+**/hosts*
+
+inventory/*
+
+.vscode/
+
+*.tfstate
+*lock.hcl
