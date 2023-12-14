@@ -12,8 +12,17 @@ output "out" {
     value = local.config
 }
 
+module "core" {
+  source = "./modules/core"
+  proxmox = {
+    username        = local.config.proxmox.user
+    password        = local.config.proxmox.password
+    endpoint        = local.config.proxmox.endpoint
+  }
+}
+
 module "k3s" {
-  source = "./modules/kube-proxmox"
+  source = "./modules/kubernetes"
 
   datastoreId = "synology-nas-backup"
 
