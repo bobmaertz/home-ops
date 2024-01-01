@@ -1,0 +1,6 @@
+proxmox:
+  user: root 
+  password: sundae3victory_EARACHE 
+  endpoint: https://192.168.1.110:8006/
+  
+gateway: 192.168.1.1

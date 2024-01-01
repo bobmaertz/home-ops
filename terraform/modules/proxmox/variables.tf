@@ -1,26 +1,26 @@
-variable "pubkey" {
-  type = string 
-}
+# variable "pubkey" {
+#   type = string
+# }
 
-variable "pvtkey" {
-  type = string 
-}
+# variable "pvtkey" {
+#   type = string
+# }
 
 variable "template" {
-    type = string 
-    default = "ubuntu-2004-cloudinit-template"
+  type    = string
+  default = "ubuntu-2004-cloudinit-template"
 }
 
 variable "start_id" {
-  type = number 
+  type = number
 }
 
 variable "gateway" {
-  type = string 
+  type = string
 }
 
 variable "datastoreId" {
-  type = string 
+  type = string
 }
 
 variable "proxmox" {
@@ -37,19 +37,19 @@ variable "hosts" {
     hostname    = string,
     hastate     = string,
     node        = string,
-    ip      = string, 
+    ip          = string,
   }))
 }
 
 variable "specs" {
   type = object({
-    cores   = number,
-    sockets = number,
-    max_memory  = number,
+    cores      = number,
+    sockets    = number,
+    max_memory = number,
     min_memory = number,
-    storage = string,
-    size    = string,
-    bridge  = string,
+    storage    = string,
+    size       = string,
+    bridge     = string,
   })
 }
 
