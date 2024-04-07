@@ -1,5 +1,5 @@
 #cloud-config
-package_upgrade: true
+package_upgrade: false
 packages:
   - qemu-guest-agent
 
@@ -12,7 +12,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - <Key Here> 
+      - ##{Key Here} 
 power_state:
     delay: now
     mode: reboot

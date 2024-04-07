@@ -22,5 +22,5 @@ terraform apply
 ## Next Steps
 1. Tie in Ansible for K8 Installation 
 2. Update Remainder of Proxmox manual steps to terraform 
-3. 
+3. Update proxmox_user to include necessary privledges for bootstraping VMs  
 
