@@ -35,6 +35,26 @@ resource "proxmox_virtual_environment_user" "operations_automation" {
   }
 }
 
+
+
+resource "proxmox_virtual_environment_user" "pve-exporter" {
+  comment  = "Managed by Terraform"
+  password = random_password.pve-exporter-password.result
+  user_id  = "pve-exporter@pve"
+  acl {
+    path = "/"
+    propagate = true
+    role_id   = "PVEAuditor"
+  }
+}
+
+resource "random_password" "pve-exporter-password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+
 resource "proxmox_virtual_environment_role" "terraform_provider_role" {
   role_id = "terraform_provider_role"
 
