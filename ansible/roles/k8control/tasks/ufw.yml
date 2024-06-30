@@ -1,0 +1,10 @@
+---
+- name: UFW - Allow connections for k8 control nodes
+  community.general.ufw:
+    rule: allow
+    comment: "{{ item.name }}"
+    proto: "{{ item.proto}}"
+    to_port: "{{ item.port}}"
+  with_items: "{{ ufw_rules }}"
+
+
