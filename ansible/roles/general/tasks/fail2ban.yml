@@ -6,15 +6,3 @@
     - sendmail
     state: latest
     update_cache: true
-- name: Override fail2ban jail configurations
-  copy:
-    src: "templates/fail2ban/jail.local.j2"
-    dest: /etc/fail2ban/jail.local
-    owner: root
-    group: root
-    mode: 0644
-- name: Copy fail2bank configuration from conf -> local 
-  copy:
-    src: /etc/fail2ban/fail2ban.conf
-    dest: /etc/fail2ban/fail2ban.local
-    remote_src: true
