@@ -1,0 +1,11 @@
+---
+- name: retrieve join url
+  shell: kubeadm token create --print-join-command
+  register: join_output
+- name: copy the join command to a local file
+  copy:
+    content: "{{ join_output.stdout }}"
+    dest: "./join.txt"
+  delegate_to: localhost
+  become: true
+  become_method: sudo 

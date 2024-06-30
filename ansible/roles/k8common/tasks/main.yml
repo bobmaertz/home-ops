@@ -1,0 +1,11 @@
+- name: Update and install packages
+  ansible.builtin.import_tasks: packages.yml
+  become: true
+
+- name: Update Swap
+  ansible.builtin.import_tasks: common.yml
+  become: true
+
+- name: Update Firewall
+  ansible.builtin.import_tasks: ufw.yml
+  become: true

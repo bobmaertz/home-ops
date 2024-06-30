@@ -1,0 +1,29 @@
+---
+username: k8s
+
+cilium_cli_arch: amd64
+cilium_cli_version: v0.12.12
+cilium_cli_checksum: b72e8666b7fdb92b51c72ccf7cd9a4f8dfc8740472085a4c0e85406d1cf3b6e6
+
+packages:
+  - kubeadm
+  - kubectl
+  - kubelet
+  
+conflicting_packages:
+  - docker.io
+
+ufw_rules:
+  - proto: tcp 
+    port: 6443
+    name: "Kubernetes: API server"
+  - proto: tcp 
+    port: 2379:2380
+    name: "Kubernetes: etcd server client API"
+  - proto: tcp 
+    port: 10259
+    name: "Kubernetes: kube-scheduler"    
+  - proto: tcp 
+    port: 10257
+    name: "Kubernetes: kube-controller-manager"    
+  
