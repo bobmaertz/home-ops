@@ -2,11 +2,10 @@
 
 .DS_Store
 
-roles*
 **/config.yaml
 **/config.yml 
 ansible.cfg
-**/hosts*
+#**/hosts*
 
 inventory/*
 
