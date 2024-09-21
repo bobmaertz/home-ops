@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.51.1"
+      version = "0.64.0"
     }
   }
 }
@@ -12,14 +12,10 @@ provider "proxmox" {
   password = var.proxmox_user_password
   endpoint = var.proxmox_endpoint
   insecure = true
-  ssh {
-    agent    = false
-  }
 }
 
 
 resource "proxmox_virtual_environment_vm" "compute_vm" {
-
   count = length(var.vms)
 
   vm_id       = var.start_id + count.index
@@ -30,66 +26,58 @@ resource "proxmox_virtual_environment_vm" "compute_vm" {
   node_name = "curiosity"
   tags      = ["terraform", "ubuntu"] //Add tag based on service/..
 
+
+  //Having a hard time cloning correctly, cant resize the disk property 
+  //TODO: Set this as optional and pass in the vm_id 
+  clone {
+    vm_id   = 8002
+    full    = true
+    retries = 3
+  }
+
   agent {
     enabled = true
   }
 
   cpu {
-    cores   = var.specs.cores
-    sockets = var.specs.sockets
+    cores   = var.vms[count.index].cores
+    sockets = var.vms[count.index].sockets
   }
 
   memory {
-    dedicated = var.specs.max_memory
-    floating  = var.specs.min_memory
+    dedicated = var.vms[count.index].min_memory
   }
 
-  operating_system {
-    type = "l26"
-  }
 
-  disk {
-    datastore_id = var.specs.datastore_id
-    file_id      = proxmox_virtual_environment_download_file.release_20231228_focal_server_cloudimg_amd64_iso_img.id
-    interface    = "virtio0" 
-    size         = var.specs.disk_size
-  }
+  //TODO: More consistent parameterization 
+  // Only use if not cloning, cloning is weird and i cant seem to get the resize to work correctly 
+  // disk {
+  //   datastore_id = var.vms[count.index].datastore_id
+  //   iothread     = true
+  //   interface    = "virtio0"
+  //   file_format  = "raw"
+  //   size         = var.vms[count.index].disk_size
+  // }
 
   network_device {
     model  = "virtio"
-    bridge = var.specs.bridge
+    bridge = var.vms[count.index].bridge
   }
 
   initialization {
+    user_account {
+      username = "ubuntu"
+      keys     = [trimspace(data.local_file.ssh_public_key.content)]
+    }
     ip_config {
       ipv4 {
-        address = "dhcp"
+        address = var.vms[count.index].ip_address
+        gateway = var.gateway
       }
     }
-
-    user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
   }
 }
 
-resource "proxmox_virtual_environment_file" "cloud_config" {
-  content_type = "snippets"
-  datastore_id = var.datastore_id
-  node_name    = var.node_name
-
-  source_file {
-    path = "cloud_init/data.yml"
-  }
+data "local_file" "ssh_public_key" {
+  filename = var.ssh_pub_key_file
 }
-
-
-
-resource "proxmox_virtual_environment_download_file" "release_20231228_focal_server_cloudimg_amd64_iso_img" {
-  content_type       = "iso"
-  datastore_id       = var.datastore_id
-  file_name          = "focal-server-cloudimg-amd64.img"
-  node_name          = var.node_name
-  url                = "http://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img"
-  checksum           = "edf43eb9f4e5ededbb3606c719c98b0e14c956278da42567e907a17d8bccb571"
-  checksum_algorithm = "sha256"
-}
-

@@ -1,8 +1,3 @@
-variable "template" {
-  type    = string
-  default = "ubuntu-2004-cloudinit-template"
-}
-
 variable "start_id" {
   type        = number
   default     = 1000
@@ -10,8 +5,11 @@ variable "start_id" {
 }
 
 variable "gateway" {
-  type    = string
-  default = "192.168.1.1"
+  type = string
+}
+
+variable "ssh_pub_key_file" {
+  type = string
 }
 
 variable "node_name" {
@@ -42,19 +40,15 @@ variable "proxmox_endpoint" {
 
 variable "vms" {
   type = list(object({
-    name = string,
-  }))
-}
-
-variable "specs" {
-  type = object({
+    name         = string,
     cores        = number,
     sockets      = number,
-    max_memory   = number,
     min_memory   = number,
     disk_size    = string,
     datastore_id = string,
     bridge       = string,
-  })
+    ip_address   = string,
+  }))
 }
+
 
