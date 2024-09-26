@@ -20,3 +20,8 @@
     remote_src: yes
     owner: ubuntu
     group: ubuntu
+
+- name: Add kubeconfig variable to bashrc
+  ansible.builtin.lineinfile:
+    path: /home/ubuntu/.bashrc
+    line: "export KUBECONFIG=~/.kube/config"
