@@ -3,21 +3,20 @@
   become: true
   shell: kubeadm init --pod-network-cidr=10.244.0.0/16 >> cluster_initialized.txt
   args:
-    chdir: $HOME
+    chdir: /home/ubuntu
     creates: cluster_initialized.txt
 
 - name: create .kube directory
-  become: true
   file:
-    path: $HOME/.kube
+    path: /home/ubuntu/.kube
     state: directory
     mode: 0755
 
 - name: copy admin.conf to user's kube config
+  become: true
   copy:
     src: /etc/kubernetes/admin.conf
     dest: /home/ubuntu/.kube/config ##TODO: fix user here. 
     remote_src: yes
     owner: ubuntu
     group: ubuntu
-  become: true
