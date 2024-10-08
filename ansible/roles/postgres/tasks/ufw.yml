@@ -1,0 +1,6 @@
+---
+- name: UFW - Allow Postgres connections
+  community.general.ufw:
+    rule: allow
+    name: Postgres
+    port: '5432'

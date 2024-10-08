@@ -8,8 +8,20 @@ moving onto installation.
 
 ---
 
+
+## Ansible 
+The Ansible playbooks in this mono-repo are a WIP feature to bring up a bare metal K8s cluster from scratch. The running installation 
+does not work well with the existing virtualized components in the lab however the installation itself is otherwise operational. 
+
+More information about the Ansible setup and current state can be found in its [Readme](./ansible/Readme.md) 
+
+
 ## Kubernetes
-TODO: 
+
+The k3s-dev cluster is running on a vanilla k3s installation on three nodes (1 control, 2 worker) using 
+[k3s-ansible](https://github.com/k3s-io/k3s-ansible) for provisioning. As part of that installation, the cluster
+is using Traefik (ingress) and ServiceLB by default. 
+
 
 ### Core Components
 
