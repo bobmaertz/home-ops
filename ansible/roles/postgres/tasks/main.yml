@@ -1,0 +1,7 @@
+- name: Update and install packages
+  ansible.builtin.import_tasks: packages.yml
+  become: true
+
+- name: Firewall Setup
+  ansible.builtin.import_tasks: ufw.yml
+  become: true

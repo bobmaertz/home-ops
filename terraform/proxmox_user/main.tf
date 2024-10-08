@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "0.51.1"
+      version = "0.64.0"
     }
   }
 }
@@ -29,7 +29,7 @@ resource "proxmox_virtual_environment_user" "operations_automation" {
   password = random_password.operations_automation_user_password.result
   user_id  = "operations_automation@pve"
   acl {
-    path = "/"
+    path      = "/"
     propagate = true
     role_id   = proxmox_virtual_environment_role.terraform_provider_role.role_id
   }
@@ -42,7 +42,7 @@ resource "proxmox_virtual_environment_user" "pve-exporter" {
   password = random_password.pve-exporter-password.result
   user_id  = "pve-exporter@pve"
   acl {
-    path = "/"
+    path      = "/"
     propagate = true
     role_id   = "PVEAuditor"
   }
