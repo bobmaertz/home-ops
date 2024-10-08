@@ -1,7 +1,7 @@
 ---
-k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key"
+k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
 k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
-k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.28/deb/"
+k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
 
 marked_packages: 
   - kubeadm
@@ -15,6 +15,7 @@ packages:
   - apt-transport-https 
   - ca-certificates 
   - curl
+  - socat 
 
 conflicting_packages:
   - docker.io
@@ -23,14 +24,15 @@ ufw_rules:
   - proto: tcp 
     port: 10250
     name: "Kubernetes: Kubelet API"   
+  - proto: tcp 
+    port: 10248
+    name: "Kubernetes: Kubelet API" 
+  - proto: tcp 
+    port: 30000:32767
+    name: "NodePort Services" 
   - proto: tcp
     port: 7946
     name: "Metallb memberlist traffic"
   - proto: udp
     port: 7946
     name: "Metallb memberlist traffic"
-## TODO: This needs updating.. 
-# worker only
-# sudo ufw allow 30000-32767/tcp NodePort Services
-# sudo ufw allow 10250/tcp
-# sudo ufw reload
