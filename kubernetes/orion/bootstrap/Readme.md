@@ -25,21 +25,6 @@ a kubernetes secret neeeds to be created for the operator to connecto the the ri
 
 References here: (One Password Connect - Getting Started)[https://developer.1password.com/docs/connect/get-started] 
 
-```sh 
-op connect server create $SERVER_NAME --vaults $VAULT_NAME 
-
-mv 1password-credentials.json 1password-credentials.json.pre-encode
-
-# Workaround to fix a encoding issue with k8 
-cat 1password-credentials.json.pre-encode | base64 | tr '/+' '_-' | tr -d '=' | tr -d '\n' > 1password-credentials.json
-
-# Match namespace that operator was installed into
-kubectl create secret generic op-credentials --from-file=1password-credentials.json -n security
-
-rm 1password-credentials.*
-
-```
-
 ## Next Steps
 - [ ] Setup Dex Signin
 - [ ] Inject username into config map 
