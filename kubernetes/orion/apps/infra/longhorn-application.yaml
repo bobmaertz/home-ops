@@ -2,20 +2,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: 1password-connect
+  name: longhorn
   namespace: argocd
 spec:
   destination:
-    namespace: external-secrets
+    namespace: longhorn-system 
     server: https://kubernetes.default.svc
   project: default
   source:
-    chart: connect
-    repoURL: https://1password.github.io/connect-helm-charts
-    targetRevision: 1.16.0
+    chart: longhorn 
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.7.2
+    helm:
+      values: |
+        preUpgradeChecker:
+          jobEnabled: false
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true

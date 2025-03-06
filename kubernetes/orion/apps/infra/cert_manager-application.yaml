@@ -2,24 +2,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: longhorn
+  name: cert-manager
   namespace: argocd
 spec:
   destination:
-    namespace: longhorn-system 
+    namespace: cert-manager
     server: https://kubernetes.default.svc
   project: default
   source:
-    chart: longhorn 
-    repoURL: https://charts.longhorn.io
-    targetRevision: 1.7.2
-    helm:
-      values: |
-        preUpgradeChecker:
-          jobEnabled: false
+    chart: cert-manager
+    repoURL: https://charts.jetstack.io/cert-manager
+    targetRevision: v0.17.0
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
