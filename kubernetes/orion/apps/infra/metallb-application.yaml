@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     chart: metallb 
-    repoURL: ttps://metallb.github.io/metallb
+    repoURL: https://metallb.github.io/metallb
     targetRevision: v0.14.9
   syncPolicy:
     automated:
