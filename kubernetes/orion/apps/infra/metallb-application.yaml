@@ -6,13 +6,13 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: metallb
+    namespace: metallb-system
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: 'https://github.com/bobmaertz/home-ops.git'
-    targetRevision: HEAD
-    path: kubernetes/orion/manifests/infra/metallb/
+    chart: metallb 
+    repoURL: ttps://metallb.github.io/metallb
+    targetRevision: v0.14.9
   syncPolicy:
     automated:
       prune: true
