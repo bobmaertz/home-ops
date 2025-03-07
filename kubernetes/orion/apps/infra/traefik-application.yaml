@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: treafik
+  namespace: argocd
+spec:
+  destination:
+    namespace: treafik
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://traefik.github.io/charts
+    targetRevision: v34.4.1
+    chart: traefik   
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
