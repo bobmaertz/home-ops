@@ -4,10 +4,10 @@ metadata:
   name: nginx-internal-virtual-service
   namespace: internal
 spec:
-  # hosts:
-  # - "k8s.bou1der.net"
   gateways:
-  - istio-system/internal-gateway 
+  - istio-system/internal-gateway
+  hosts: 
+  - "*"
   http:
   - match:
     - uri:
