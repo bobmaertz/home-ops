@@ -5,7 +5,7 @@ metadata:
   namespace: internal
 spec:
   gateways:
-  - istio-system/internal-gateway
+  - internal/internal-gateway
   hosts: 
   - "*"
   http:
