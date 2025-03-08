@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: internal-gateway
-  namespace: istio-system
+  namespace: default
 spec:
   selector:
     istio: ingressgateway # Use the default Istio ingress gateway
