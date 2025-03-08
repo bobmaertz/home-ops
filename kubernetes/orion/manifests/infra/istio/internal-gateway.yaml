@@ -1,15 +1,15 @@
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: internal-gateway
-  namespace: internal
-spec:
-  selector:
-    istio: ingressgateway # Use the default Istio ingress gateway
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
+# apiVersion: networking.istio.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: internal-gateway
+#   namespace: internal
+# spec:
+#   selector:
+#     istio: ingressgateway # Use the default Istio ingress gateway
+#   servers:
+#   - port:
+#       number: 80
+#       name: http
+#       protocol: HTTP
+#     hosts:
+#     - "*"

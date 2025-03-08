@@ -1,19 +1,19 @@
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: nginx-internal-virtual-service
-  namespace: internal
-spec:
-  gateways:
-  - internal/internal-gateway
-  hosts: 
-  - "*"
-  http:
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: nginx-service  
-        port:
-          number: 80
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: nginx-internal-virtual-service
+#   namespace: internal
+# spec:
+#   gateways:
+#   - internal/internal-gateway
+#   hosts: 
+#   - "*"
+#   http:
+#   - match:
+#     - uri:
+#         prefix: /
+#     route:
+#     - destination:
+#         host: nginx-service  
+#         port:
+#           number: 80
