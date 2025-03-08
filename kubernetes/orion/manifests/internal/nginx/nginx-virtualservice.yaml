@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-internal-virtual-service
+  namespace: internal
+spec:
+  hosts:
+  - "k8s.bou1der.net"
+  gateways:
+  - istio-system/internal 
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: nginx-service  
+        port:
+          number: 80
