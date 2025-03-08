@@ -6,13 +6,13 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: istio-system
+    namespace: istio-ingress
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://istio-release.storage.googleapis.com/charts
+    repoURL: istio/gateway
     targetRevision: v1.25.0
-    chart: istiod 
+    chart: istio-ingressgateway
   syncPolicy:
     automated:
       prune: true
