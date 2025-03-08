@@ -12,5 +12,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "*.bou1der.net"
-    - "bou1der.net"
+    - "*"
