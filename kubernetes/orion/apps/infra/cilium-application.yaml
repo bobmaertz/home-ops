@@ -35,6 +35,13 @@ spec:
           value: "true"
         - name: envoy.securityContext.capabilities.keepCapNetBindService
           value: "true"
+        - name: "hubble.relay.enabled"
+          value: "true"
+        - name: "hubble.ui.enabled"
+          value: "true"
+        - name: "l2announcements.enabled"
+          value: "true"
+          ## TODO: QOS / Burst
     # - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     #   targetRevision: HEAD
     #   path: kubernetes/orion/manifests/infra/istio
