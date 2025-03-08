@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://istio-release.storage.googleapis.com/charts
     targetRevision: v1.25.0
-    chart: istio-ingressgateway
+    chart: gateway
   syncPolicy:
     automated:
       prune: true
