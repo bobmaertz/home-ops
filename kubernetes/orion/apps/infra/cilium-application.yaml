@@ -33,6 +33,10 @@ spec:
           value: "7445"
         - name: gatewayAPI.enabled
           value: "true"
+        - name: gatewayAPI.enableAlpn
+          value: "true"
+        - name: gatewayAPI.enableAppProtocol
+          value: "true"
         - name: envoy.securityContext.capabilities.keepCapNetBindService
           value: "true"
         - name: "hubble.relay.enabled"
