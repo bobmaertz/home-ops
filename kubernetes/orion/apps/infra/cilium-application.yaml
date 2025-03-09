@@ -45,6 +45,10 @@ spec:
           value: "true"
         - name: "l2announcements.enabled"
           value: "true"
+        - name: "l2podAnnouncements.enabled"
+          value: "true"
+        - name: "l2podAnnouncements.interface"
+          value: "eth0"
         - name: externalIPs.enabled
           value: "true"
           ## TODO: QOS / Burst
