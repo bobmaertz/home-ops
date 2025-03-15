@@ -12,6 +12,6 @@ spec:
   source:
     repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
-    path: kubernetes/orion/manifests/internal/nginx/
+    path: kubernetes/orion/manifests/default/nginx/
   syncPolicy:
     automated: {}
