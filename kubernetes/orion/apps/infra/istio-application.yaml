@@ -16,10 +16,9 @@ spec:
     - repoURL: https://istio-release.storage.googleapis.com/charts
       targetRevision: v1.25.0
       chart: base 
-      helm:
-         parameters:
-         - name:  cni.enabled
-           value: "true"
+    - repoURL: https://istio-release.storage.googleapis.com/charts
+      targetRevision: v1.25.0
+      chart: cni 
     - repoURL: 'https://github.com/bobmaertz/home-ops.git'
       targetRevision: HEAD
       path: kubernetes/orion/manifests/infra/istio
