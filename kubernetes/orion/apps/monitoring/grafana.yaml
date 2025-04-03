@@ -13,6 +13,10 @@ spec:
   - repoURL: https://grafana.github.io/helm-charts
     targetRevision: 8.11.2
     chart: grafana
+    helm:
+      values: |
+        persistence:
+          enabled: true 
   syncPolicy:
     automated:
       prune: true
