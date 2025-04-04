@@ -15,7 +15,7 @@ spec:
     chart: prometheus
     helm:
       values: |
-        extraScrapeConfigs: 
+        extraScrapeConfigs: |
         - job_name: 'Proxmox-Curiosity'
           metrics_path: /pve
           params:
