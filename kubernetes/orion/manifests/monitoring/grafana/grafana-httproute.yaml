@@ -12,12 +12,12 @@ spec:
     - path:
         type: PathPrefix
         value: /grafana
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /
+    # filters:
+    # - type: URLRewrite
+    #   urlRewrite:
+    #     path:
+    #       type: ReplacePrefixMatch
+    #       replacePrefixMatch: /
     backendRefs:
     - name: grafana  # service name set by helm chart
       port: 80

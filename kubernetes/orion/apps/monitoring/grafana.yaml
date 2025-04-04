@@ -16,7 +16,10 @@ spec:
     helm:
       values: |
         persistence:
-          enabled: true 
+          enabled: true
+        grafana.ini:
+          server:
+            root_url: https://internal.k8s.bou1der.net/grafana 
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/monitoring/grafana/
