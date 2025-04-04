@@ -12,7 +12,7 @@ spec:
   sources:
   - repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 27.8.0
-    chart: prometheus-community
+    chart: prometheus
     helm:
       values: |
         extraScrapeConfigs: |
@@ -32,11 +32,14 @@ spec:
             - targets:
               - 'docker.bou1der.net:9100'
         - job_name: 'nvidia_exporter'
-            static_configs:
-              - targets: ['ml01.bou1der.net:9202']
-            metrics_path: /metrics
-            params:
-              module: [default]`
+          static_configs:
+            - targets: ['ml01.bou1der.net:9202']
+          metrics_path: /metrics
+          params:
+            module: [default]
+        - job_name: 'cadvisor'
+          static_configs:
+            - targets: ['docker.bou1der.net:8080']
   syncPolicy:
     automated:
       prune: true
