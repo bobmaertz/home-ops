@@ -9,13 +9,13 @@ spec:
     namespace: prometheus
     server: https://kubernetes.default.svc
   project: default
-  sources:
-  - repoURL: https://prometheus-community.github.io/helm-charts
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 27.8.0
     chart: prometheus
     helm:
       values: |
-        extraScrapeConfigs: |
+        extraScrapeConfigs: 
         - job_name: 'Proxmox-Curiosity'
           metrics_path: /pve
           params:
