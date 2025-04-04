@@ -9,6 +9,16 @@ spec:
   - name: http
     port: 80
     protocol: HTTP
+    hostname: "grafana.bou1der.net"
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            kubernetes.io/metadata.name: grafana
+  - name: http
+    port: 80
+    protocol: HTTP
     allowedRoutes:
       namespaces:
         from: Selector
@@ -18,4 +28,3 @@ spec:
               operator: In
               values:
               - default
-              - grafana

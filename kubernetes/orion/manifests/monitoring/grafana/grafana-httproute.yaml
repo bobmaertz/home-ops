@@ -7,11 +7,13 @@ spec:
   parentRefs:
   - name: default-gateway
     namespace: istio-ingress
+  hostnames:
+  - "grafana.bou1der.net"
   rules:
-  - matches:
-    - path:
+  - path:
+    - host:
         type: PathPrefix
-        value: /grafana
+        value: /
     filters:
     - type: URLRewrite
       urlRewrite:
