@@ -13,5 +13,9 @@ spec:
       namespaces:
         from: Selector
         selector:
-          matchLabels:
-            kubernetes.io/metadata.name: default
+          matchExpressions:
+            - key: kubernetes.io/metadata.name
+              operator: In
+              values:
+              - default
+              - grafana
