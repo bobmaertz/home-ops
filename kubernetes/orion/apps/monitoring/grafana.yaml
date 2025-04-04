@@ -17,6 +17,9 @@ spec:
       values: |
         persistence:
           enabled: true 
+  - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+    targetRevision: HEAD
+    path: kubernetes/orion/manifests/monitoring/grafana/
   syncPolicy:
     automated:
       prune: true
