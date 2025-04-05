@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bou1der-net
+  namespace: istio-ingress
+spec:
+  secretName: bou1der-net-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: bou1der.net
+  dnsNames: ["bou1der.net", "*.bou1der.net"]

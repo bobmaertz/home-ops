@@ -6,25 +6,16 @@ metadata:
 spec:
   gatewayClassName: istio
   listeners:
-  - name: http
-    port: 80
-    protocol: HTTP
-    hostname: "grafana.bou1der.net"
+  - name: https-listener
+    hostname: "*.bou1der.net"
+    port: 443
+    protocol: HTTPS
     allowedRoutes:
       namespaces:
-        from: Selector
-        selector:
-          matchLabels:
-            kubernetes.io/metadata.name: grafana
-  - name: http
-    port: 80
-    protocol: HTTP
-    allowedRoutes:
-      namespaces:
-        from: Selector
-        selector:
-          matchExpressions:
-            - key: kubernetes.io/metadata.name
-              operator: In
-              values:
-              - default
+        from: All
+    tls:
+      mode: Terminate 
+      certificateRefs:
+        - name: bou1der-net-tls 
+          kind: Secret  
+          group: ""
