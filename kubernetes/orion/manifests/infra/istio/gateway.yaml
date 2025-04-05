@@ -19,3 +19,12 @@ spec:
         - name: bou1der-net-tls 
           kind: Secret  
           group: ""
+  - name: https-listener
+    hostname: "*.bou1der.net"
+    port: 80
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      httpsRedirect: true # sends 301 redirect for http requests
