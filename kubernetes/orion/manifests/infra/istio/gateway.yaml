@@ -19,7 +19,7 @@ spec:
         - name: bou1der-net-tls 
           kind: Secret  
           group: ""
-  - name: https-listener
+  - name: http-listener
     hostname: "*.bou1der.net"
     port: 80
     protocol: HTTP
