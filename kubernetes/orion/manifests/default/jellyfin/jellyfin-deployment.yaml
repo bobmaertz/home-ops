@@ -27,10 +27,7 @@ spec:
           claimName: jellyfin-pvc-config
       - name: nfs-jellyfin-data
         persistentVolumeClaim:
-          claimName: jellyfin-pvc-data
-      - name: dri
-        hostPath:
-          path: /dev/dri      
+          claimName: jellyfin-pvc-data      
       containers:
       - env:
         - name: JELLYFIN_PublishedServerUrl 
@@ -40,9 +37,7 @@ spec:
         - name: PUID
           value: "1001" 
         - name: TZ
-          value: America/New_York
-        securityContext:
-          privileged: true # Container must run as privileged inside of the pod, required for hardware acceleration
+          value: America/New_York       
         image: ghcr.io/linuxserver/jellyfin
         imagePullPolicy: Always
         name: jellyfin
@@ -75,11 +70,17 @@ spec:
           requests:
             cpu: "250m"
             memory: "256Mi" 
-        stdin: true
-        tty: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1001  # Must match your PUID
+          runAsGroup: 1002  # Must match your PGID
+          seccompProfile:
+            type: RuntimeDefault
         volumeMounts:
-        - name: dri
-          mountPath: /dev/dri  # For Intel QuickSync  # Fo
         - mountPath: /config
           name: nfs-jellyfin-config
         - mountPath: /data
