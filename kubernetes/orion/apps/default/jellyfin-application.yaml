@@ -1,0 +1,23 @@
+# ArgoCD Installation YAML
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jellyfin-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: jellyfin
+    server: 'https://kubernetes.default.svc'
+  project: default
+  source:
+    repoURL: 'https://github.com/bobmaertz/home-ops.git'
+    targetRevision: HEAD
+    path: kubernetes/orion/manifests/default/jellyfin/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true

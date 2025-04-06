@@ -1,0 +1,35 @@
+# ind: Service
+# apiVersion: v1
+# metadata:
+#   name: jellyfin-udp      
+#   namespace: jellyfin      
+# spec:
+#   selector:
+#     app: jellyfin          
+#   ports:
+#   - port: 1900           
+#     targetPort: 1900      
+#     name: dlna-udp         
+#     protocol: UDP
+#   - port: 7359
+#     targetPort: 7359
+#     name: discovery-udp
+#     protocol: UDP
+#   type: LoadBalancer
+#   sessionAffinity: ClientIP 
+# ---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jellyfin-service     
+  namespace: jellyfin      
+spec:
+  selector:
+    app: jellyfin          
+  ports:
+  - port: 80            
+    targetPort: 8096       
+    name: http-tcp        
+    protocol: TCP
+  type: LoadBalancer
+  sessionAffinity: ClientIP # This is necessary for multi-replica deployments
