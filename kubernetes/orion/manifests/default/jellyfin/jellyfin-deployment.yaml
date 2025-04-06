@@ -52,15 +52,6 @@ spec:
         - containerPort: 7359
           name: discovery-udp
           protocol: UDP      
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8096
-          initialDelaySeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8096
         resources:
           limits:
             cpu: "500m"
