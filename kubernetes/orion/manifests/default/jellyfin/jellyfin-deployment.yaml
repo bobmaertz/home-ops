@@ -30,15 +30,13 @@ spec:
           claimName: jellyfin-pvc-data      
       containers:
       - env:
-        - name: JELLYFIN_PublishedServerUrl 
-          value: "https://jellyfin.bou1der.net"
         - name: PGID
           value: "1002"
         - name: PUID
-          value: "1001" 
+          value: "1000" 
         - name: TZ
           value: America/New_York       
-        image: ghcr.io/linuxserver/jellyfin
+        image: jellyfin/jellyfin:latest
         imagePullPolicy: Always
         name: jellyfin
         ports:
@@ -76,8 +74,7 @@ spec:
             drop:
             - ALL
           runAsNonRoot: true
-          runAsUser: 1001  # Must match your PUID
-          runAsGroup: 1002  # Must match your PGID
+          runAsUser: 1000  # Official image uses 1000 not 1001
           seccompProfile:
             type: RuntimeDefault
         volumeMounts:
