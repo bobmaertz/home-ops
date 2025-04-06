@@ -9,10 +9,13 @@ spec:
     namespace: argocd
     server: https://kubernetes.default.svc
   project: default
-  source:
-    repoURL: 'https://github.com/bobmaertz/home-ops.git'
-    targetRevision: HEAD
-    path: kubernetes/orion/manifests/infra/argocd
+  sources:
+    - chart: argo-cd
+      repoURL:  https://argoproj.github.io/argo-helm
+      targetRevision: 7.8.23
+    - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+      targetRevision: HEAD
+      path: kubernetes/orion/manifests/infra/argocd
   syncPolicy:
     automated:
       prune: true
