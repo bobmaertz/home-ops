@@ -13,12 +13,11 @@ spec:
     - chart: argo-cd
       repoURL:  https://argoproj.github.io/argo-helm
       targetRevision: 7.8.23
-      helm:
-        parameters:
-          - name: crds.install
-            value: "false"   
-          - name: server.extraArgs
-            value: --insecure 
+      helm:  
+        values: |
+          configs:
+            params:
+              server.insecure: "true"
     - repoURL: 'https://github.com/bobmaertz/home-ops.git'
       targetRevision: HEAD
       path: kubernetes/orion/manifests/infra/argocd
