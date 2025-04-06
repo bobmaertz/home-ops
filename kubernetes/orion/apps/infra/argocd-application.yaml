@@ -17,7 +17,7 @@ spec:
         parameters:
           - name: crds.install
             value: "false"   
-          - name: "server.extraArgs"
+          - name: server.extraArgs
             value: --insecure 
     - repoURL: 'https://github.com/bobmaertz/home-ops.git'
       targetRevision: HEAD
