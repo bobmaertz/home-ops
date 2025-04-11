@@ -1,64 +1,69 @@
 ## 📖 Overview
 
-This repository houses the infrasturcture definitions for my homelab. Its a
-work in progress and may contain bugs / incompatibilities. 
+This repository houses the infrastructure definitions for my homelab. Its primary purpose is to provide a platform to practice on various technologies. 
 
-The homelab is built on a proxmox hypervisor which needs to be installed before 
-moving onto installation. 
+The homelab compute resources are built on a Proxmox hypervisor which hosts non-containerized virtual machines,
+alongside a dedicated 3-node Talos bare metal Kubernetes cluster. Networking is primarily Unifi network applicances. Non-Compute storage and backups are housed on a Synology NAS. 
 
 ---
 
+## Infrastructure Management
 
-## Ansible 
-The Ansible playbooks in this mono-repo are a WIP feature to bring up a bare metal K8s cluster from scratch. The running installation 
-does not work well with the existing virtualized components in the lab however the installation itself is otherwise operational. 
+### Proxmox
 
-More information about the Ansible setup and current state can be found in its [Readme](./ansible/Readme.md) 
+Proxmox is used as the virtualization platform for non-containerized workloads. Virtual machines and
+resources in Proxmox are managed through:
 
+- **Terraform**: Manages Proxmox virtual machine resources and configurations
+- **Ansible**: Handles configuration management tasks for Proxmox hosts and VMs
 
-## Kubernetes
+This area is still evolving and I've working on migrations here. The IAC is not quite up to date. Mostly reference at this point. 
 
-The k3s-dev cluster is running on a vanilla k3s installation on three nodes (1 control, 2 worker) using 
-[k3s-ansible](https://github.com/k3s-io/k3s-ansible) for provisioning. As part of that installation, the cluster
-is using Traefik (ingress) and ServiceLB by default. 
+### Kubernetes
 
+The primary Kubernetes cluster ("orion") runs on a 3-node bare metal [Talos Linux](https://www.talos.dev/) 
+installation. Talos provides a minimal, immutable Linux distribution designed specifically for Kubernetes.
 
-### Core Components
+#### Core Components
 
-TODO: 
+- **Gateway API**: Manages ingress traffic using [Gateway API](https://gateway-api.sigs.k8s.io/)
+- **External Secrets**: Integrates with 1Password for secret management
+- **Cert Manager**: Handles certificate automation with Let's Encrypt
+- **ArgoCD**: Provides GitOps-based application deployment
 
 ### Directories
 
-This Git repository contains the following directories under [Kubernetes](./kubernetes/).
+This Git repository contains the following directories under [Kubernetes](./kubernetes/):
 
 ```sh
 📁 kubernetes
-├── 📁 k3s-dev            # k3s-dev cluster
-│   ├── 📁 apps           # applications
-│   ├── 📁 bootstrap      # bootstrap procedures
-│   └── 📁 templates      # re-useable components
-└── 📁 ...             # other clusters
+├── 📁 orion              # Talos-based "orion" cluster
+│   ├── 📁 apps           # Applications deployed via ArgoCD
+│   ├── 📁 manifests      # Core infrastructure components
+│   └── 📁 bootstrap      # Cluster bootstrap procedures
+└── 📁 terraform          # Terraform configurations for Proxmox
 ```
 
 ## Dependencies
 
-| Service                                         | Use                                                               |
-|-------------------------------------------------|-------------------------------------------------------------------|
-| [1Password](https://1password.com/)             | XXXXXXXX                                                          |
-| [Cloudflare](https://www.cloudflare.com/)       | Domain and S3                                                     |
-| [GitHub](https://github.com/)                   | Hosting this repository                                           |
-|                                                 |                                                                   |
+| Service    | Use  |
+|--------|---------|
+| [1Password](https://1password.com/) | Secret Store        |
+| [Cloudflare](https://www.cloudflare.com/)| Domain  |
+| [GitHub](https://github.com/)| Hosting this repository    |
+| [LetsEncrypt](https://letsencrypt.com/)| Certificates |
 
 ---
 
 ##  Hardware
 
-| Device                              | Count | OS Disk Size | Data Disk Size               | Ram  | Operating System | Purpose                 |
-|-------------------------------------|-------|--------------|------------------------------|------|------------------|-------------------------|
+| Device  | Count | OS Disk Size | Data Disk Size    | Ram  | Operating System | Purpose      |
+|-------|-------|---------|--------------|------|---------|--------------|
 | UniFi UDMP                          | 1     | -            | -                            | -    | -                | Router & NVR            |
 | UniFi US-24-250W                    | 1     | -            | -                            | -    | -                | 1Gb PoE Switch          |
 | APC                                 | 1     | -            | -                            | -    | -                | UPS                     |
 | Super Mirco X8DTL-iF, 2x Xeon E5620 | 1     | -            | -                            | 96GB| Proxmox v8.x.x   | Compute                 | 
+| Lenovo ThinkCentre M715q Tiny Ryzen 5 Pro 2400GE 3.20 GHz | 3    | -            | -       | 8 GB | Talos Linux   | Compute                 |
 
 ---
 
