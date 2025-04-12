@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kavita
+  name: kavita
+  namespace: kavita
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: kavita
+  template:
+    metadata:
+      labels:
+        app: kavita
+    spec:
+      volumes:
+      - name: nfs-kavita-config
+        persistentVolumeClaim:
+          claimName: kavita-pvc-config
+      - name: nfs-kavita-data
+        persistentVolumeClaim:
+          claimName: kavita-pvc-data      
+      containers:
+      - env:
+        - name: PGID
+          value: "1002"
+        - name: PUID
+          value: "1000" 
+        - name: TZ
+          value: America/New_York       
+        image: lscr.io/linuxserver/kavita:latest
+        imagePullPolicy: Always
+        name: kavita
+        ports:
+        - containerPort: 5000
+          name: http-tcp
+          protocol: TCP 
+        resources:
+          limits:
+            cpu: "2000m"
+            memory: "256m"
+          requests:
+            cpu: "1000m"
+            memory: "1Gi" 
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1000  # Official image uses 1000 not 1001
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /config
+          name: nfs-kavita-config
+        - mountPath: /data
+          name: nfs-kavita-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always

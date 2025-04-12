@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: kavita-service     
+  namespace: kavita      
+spec:
+  selector:
+    app: kavita          
+  ports:
+  - port: 80            
+    targetPort: 5000       
+    name: http-tcp        
+    protocol: TCP
+  type: LoadBalancer
+  sessionAffinity: ClientIP 
