@@ -42,14 +42,13 @@ spec:
         ports:
         - containerPort: 5000
           name: http-tcp
-          protocol: TCP 
         resources:
           limits:
-            cpu: "2000m"
-            memory: "256m"
-          requests:
             cpu: "1000m"
-            memory: "1Gi" 
+            memory: "128m"
+          requests:
+            cpu: "256m"
+            memory: "128m" 
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
