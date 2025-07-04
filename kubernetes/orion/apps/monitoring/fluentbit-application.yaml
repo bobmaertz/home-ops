@@ -18,12 +18,13 @@ spec:
        config:
         outputs: |
           [OUTPUT]
-            Name loki
-            Match *
-            Host loki.loki.svc.cluster.local
-            Port 3100
-            Labels job=fluentbit
-            Auto_Kubernetes_Labels on
+              Name loki
+              Match *
+              Host loki.loki.svc.cluster.local
+              Port 3100
+              Labels job=fluentbit
+              Auto_Kubernetes_Labels on              
+                          
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/monitoring/fluentbit/
