@@ -1,0 +1,25 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: loki-route
+  namespace: loki
+spec:
+  parentRefs:
+  - name: default-gateway
+    namespace: istio-ingress
+  hostnames:
+  - "loki.bou1der.net"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: loki-headless  # service name set by helm chart
+      port: 3100
