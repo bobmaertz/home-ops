@@ -1,0 +1,28 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+spec:
+  destination:
+    namespace: loki 
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 8.11.2
+    chart: loki
+    helm:
+      values: |
+  - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+    targetRevision: HEAD
+    path: kubernetes/orion/manifests/monitoring/loki/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
