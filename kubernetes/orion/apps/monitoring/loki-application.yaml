@@ -18,10 +18,10 @@ spec:
         loki:
           storage:
             type: filesystem
-              bucketNames:
-                chunks: loki-chunks
-                ruler: loki-ruler
-                admin: loki-admin
+            bucketNames:
+              chunks: loki-chunks
+              ruler: loki-ruler
+              admin: loki-admin
           commonConfig:
             replication_factor: 1
           schemaConfig:
