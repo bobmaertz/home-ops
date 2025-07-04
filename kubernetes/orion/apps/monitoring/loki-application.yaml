@@ -11,8 +11,8 @@ spec:
   project: default
   sources:
   - repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 8.11.2
-    chart: loki
+    targetRevision: v6.30.1
+    chart: loki-stack
     helm:
       values: |
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
