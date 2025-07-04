@@ -13,8 +13,6 @@ spec:
   - repoURL: https://grafana.github.io/helm-charts
     targetRevision: v6.30.1
     chart: loki
-    helm:
-      values: |
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/monitoring/loki/
