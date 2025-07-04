@@ -3,6 +3,6 @@ kind: Namespace
 metadata:
   name: fluent-bit
   annotations:
-    pod-security.kubernetes.io/enforce: "restricted"
+    pod-security.kubernetes.io/enforce: "baseline"
     pod-security.kubernetes.io/enforce-version: "latest"
     pod-security.kubernetes.io/default-seccomp-profile: "runtime/default"
