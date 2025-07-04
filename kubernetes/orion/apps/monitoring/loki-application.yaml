@@ -16,6 +16,7 @@ spec:
     helm:
       values: |
         loki:
+          deploymentMode: SingleBinary
           storage:
             type: filesystem
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
