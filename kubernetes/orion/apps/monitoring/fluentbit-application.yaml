@@ -24,7 +24,7 @@ spec:
               Port 3100
               Labels job=fluentbit
               Auto_Kubernetes_Labels on              
-              TenantId: test          
+              tenant_id: test          
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/monitoring/fluentbit/
