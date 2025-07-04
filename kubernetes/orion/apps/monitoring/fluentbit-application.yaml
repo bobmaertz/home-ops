@@ -25,9 +25,9 @@ spec:
               BatchSize         102400
               Labels            {job="fluent-bit"}
               LogLevel          info
-  - repoURL: 'https://github.com/bobmaertz/home-ops.git'
-    targetRevision: HEAD
-    path: kubernetes/orion/manifests/monitoring/fluend/
+  # - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+  #   targetRevision: HEAD
+  #   path: kubernetes/orion/manifests/monitoring/fluend/
   syncPolicy:
     automated:
       prune: true
