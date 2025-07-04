@@ -2,11 +2,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: fluenbit
+  name: fluentbit
   namespace: argocd
 spec:
   destination:
-    namespace: fluenbit 
+    namespace: fluent-bit 
     server: https://kubernetes.default.svc
   project: default
   sources:
@@ -25,14 +25,14 @@ spec:
               BatchSize         102400
               Labels            {job="fluent-bit"}
               LogLevel          info
-  # - repoURL: 'https://github.com/bobmaertz/home-ops.git'
-  #   targetRevision: HEAD
-  #   path: kubernetes/orion/manifests/monitoring/fluend/
+  - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+    targetRevision: HEAD
+    path: kubernetes/orion/manifests/monitoring/fluentbit/
   syncPolicy:
     automated:
       prune: true
       selfHeal: false
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=false
       - PruneLast=true
       - ApplyOutOfSyncOnly=true
