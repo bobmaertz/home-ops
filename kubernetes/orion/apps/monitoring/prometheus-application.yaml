@@ -27,9 +27,9 @@ spec:
           - job_name: 'node_exporter'
             static_configs:
               - targets: ['docker.bou1der.net:9100']
-          - job_name: 'nvidia_exporter'
+          - job_name: 'Sojourner'
             static_configs:
-              - targets: ['ml01.bou1der.net:9202']
+              - targets: ['ml01.bou1der.net:9202', 'ml01.bou1der.net:9100']
             metrics_path: /metrics
             params:
               module: [default]
