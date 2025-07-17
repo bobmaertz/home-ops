@@ -1,0 +1,25 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: registry-route
+  namespace: registry
+spec:
+  parentRefs:
+  - name: default-gateway
+    namespace: istio-ingress
+  hostnames:
+  - "registry.bou1der.net"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: registry  # service name set by helm chart
+      port: 80
