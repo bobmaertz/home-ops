@@ -11,7 +11,7 @@ spec:
   project: default
   sources:
   - repoURL: 'https://github.com/bobmaertz/registry.git'
-    targetRevision: v0.1.0
+    targetRevision: HEAD
     path: .
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
