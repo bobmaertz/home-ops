@@ -12,7 +12,7 @@ spec:
   sources:
   - repoURL: 'https://github.com/bobmaertz/registry.git'
     targetRevision: v0.1.0
-    path: /
+    path: .
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/infra/registry/
