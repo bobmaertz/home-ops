@@ -13,13 +13,7 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        path:
-          type: ReplacePrefixMatch
-          replacePrefixMatch: /
+        value: /v2/
     backendRefs:
     - name: registry  # service name set by helm chart
       port: 80
