@@ -7,6 +7,7 @@ spec:
   parentRefs:
   - name: default-gateway
     namespace: istio-ingress
+    sectionName: http-listener
   hostnames:
   - "registry.bou1der.net"
   rules:
