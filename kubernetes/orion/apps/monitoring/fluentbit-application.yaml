@@ -87,15 +87,15 @@ spec:
               Regex         ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
               Time_Key      time
               Time_Format   %Y-%m-%dT%H:%M:%S.%L%z
-        outputs: |
-          [OUTPUT]
-              Name loki
-              Match *
-              Host loki.loki.svc.cluster.local
-              Port 3100
-              Labels job=fluentbit
-              Auto_Kubernetes_Labels on              
-              tenant_id test          
+          outputs: |
+            [OUTPUT]
+                Name loki
+                Match *
+                Host loki.loki.svc.cluster.local
+                Port 3100
+                Labels job=fluentbit
+                Auto_Kubernetes_Labels on              
+                tenant_id test          
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/monitoring/fluentbit/
