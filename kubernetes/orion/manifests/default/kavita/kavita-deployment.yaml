@@ -30,6 +30,21 @@ spec:
           claimName: kavita-pvc-data
       - name: run
         emptyDir: {}
+      initContainers:
+      - name: init-run
+        image: busybox
+        command: 
+        - sh
+        - -c
+        - |
+          mkdir -p /run
+          chmod 755 /run
+          chown 1000:1000 /run
+        volumeMounts:
+        - name: run
+          mountPath: /run
+        securityContext:
+          runAsUser: 0
       containers:
       - env:
         - name: PGID
