@@ -20,8 +20,6 @@ spec:
         parameters:
           - name: installCRDs
             value: "true"
-          - name: enableGatewayAPI
-            value: "true"
   syncPolicy:
     automated:
       prune: true
