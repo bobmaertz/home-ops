@@ -63,7 +63,5 @@ spec:
           name: nfs-kavita-config
         - mountPath: /data
           name: nfs-kavita-data
-        - mountPath: /run 
-          name: run 
       dnsPolicy: ClusterFirst
       restartPolicy: Always
