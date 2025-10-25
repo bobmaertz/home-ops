@@ -27,7 +27,9 @@ spec:
           claimName: kavita-pvc-config
       - name: nfs-kavita-data
         persistentVolumeClaim:
-          claimName: kavita-pvc-data      
+          claimName: kavita-pvc-data
+      - name: run
+        emptyDir: {}
       containers:
       - env:
         - name: PGID
@@ -50,14 +52,10 @@ spec:
             cpu: "256m"
             memory: "128Mi" 
         securityContext:
-          allowPrivilegeEscalation: true
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
             - ALL
-            add:
-            - CHOWN
-            - SETUID
-            - SETGID
           runAsNonRoot: true
           runAsUser: 1000  # Official image uses 1000 not 1001
           seccompProfile:
@@ -67,5 +65,7 @@ spec:
           name: nfs-kavita-config
         - mountPath: /data
           name: nfs-kavita-data
+        - mountPaht: /run 
+          name: run 
       dnsPolicy: ClusterFirst
       restartPolicy: Always
