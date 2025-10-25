@@ -28,23 +28,6 @@ spec:
       - name: nfs-kavita-data
         persistentVolumeClaim:
           claimName: kavita-pvc-data
-      - name: run
-        emptyDir: {}
-      initContainers:
-      - name: init-run
-        image: busybox
-        command: 
-        - sh
-        - -c
-        - |
-          mkdir -p /run
-          chmod 755 /run
-          chown 1000:1000 /run
-        volumeMounts:
-        - name: run
-          mountPath: /run
-        securityContext:
-          runAsUser: 0
       containers:
       - env:
         - name: PGID
@@ -53,7 +36,7 @@ spec:
           value: "1000" 
         - name: TZ
           value: America/New_York       
-        image: lscr.io/linuxserver/kavita:latest
+        image: jvmilazz0/kavita:latest
         imagePullPolicy: Always
         name: kavita
         ports:
