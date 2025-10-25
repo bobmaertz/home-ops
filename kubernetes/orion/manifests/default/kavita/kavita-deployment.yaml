@@ -50,11 +50,12 @@ spec:
             cpu: "256m"
             memory: "128Mi" 
         securityContext:
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: true
           capabilities:
             drop:
             - ALL
           runAsNonRoot: true
+          runAsGroup: 1002
           runAsUser: 1000  # Official image uses 1000 not 1001
           seccompProfile:
             type: RuntimeDefault
