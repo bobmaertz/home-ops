@@ -1,3 +1,16 @@
 ---
+galaxy_info:
+  role_name: k8control
+  namespace: bobmaertz
+  author: Bob Maertz
+  description: Kubernetes control plane configuration
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+
 dependencies:
   - role: k8common
