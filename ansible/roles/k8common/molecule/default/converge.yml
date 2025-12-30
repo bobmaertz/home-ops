@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include geerlingguy.containerd role
+      ansible.builtin.include_role:
+        name: geerlingguy.containerd
+
+    - name: Include k8common role
+      ansible.builtin.include_role:
+        name: k8common

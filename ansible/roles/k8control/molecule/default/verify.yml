@@ -1,0 +1,41 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify ubuntu user exists
+      ansible.builtin.user:
+        name: ubuntu
+      check_mode: true
+      register: user_check
+      failed_when: user_check.changed
+
+    - name: Verify .kube directory exists
+      ansible.builtin.stat:
+        path: /home/ubuntu/.kube
+      register: kube_dir
+      failed_when: not kube_dir.stat.exists or not kube_dir.stat.isdir
+
+    - name: Verify kubeconfig file exists
+      ansible.builtin.stat:
+        path: /home/ubuntu/.kube/config
+      register: kubeconfig
+      failed_when: not kubeconfig.stat.exists
+
+    - name: Verify kubeconfig has correct permissions
+      ansible.builtin.stat:
+        path: /home/ubuntu/.kube/config
+      register: kubeconfig_perms
+      failed_when: kubeconfig_perms.stat.mode != '0600'
+
+    - name: Verify KUBECONFIG export in bashrc
+      ansible.builtin.shell: grep "export KUBECONFIG" /home/ubuntu/.bashrc
+      register: bashrc_check
+      changed_when: false
+      failed_when: bashrc_check.rc != 0
+
+    - name: Verify cluster initialization marker exists
+      ansible.builtin.stat:
+        path: /home/ubuntu/cluster_initialized.txt
+      register: cluster_init
+      failed_when: not cluster_init.stat.exists
