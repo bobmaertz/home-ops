@@ -1,6 +1,4 @@
 ---
-- name: Kubectl install Flannel 
-  shell: kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
-  ## Note network was already setup to 10.244.0.0/16 
-
-
+- name: Kubectl install Flannel
+  ansible.builtin.command: kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+  changed_when: false

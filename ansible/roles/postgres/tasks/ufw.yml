@@ -3,4 +3,4 @@
   community.general.ufw:
     rule: allow
     name: Postgres
-    port: '5432'
+    port: "5432"

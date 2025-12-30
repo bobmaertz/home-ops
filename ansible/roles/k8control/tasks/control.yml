@@ -1,25 +1,26 @@
 ---
-- name: initialize the cluster
+- name: Initialize the cluster
   become: true
-  shell: kubeadm init --pod-network-cidr=10.244.0.0/16 >> cluster_initialized.txt
+  ansible.builtin.shell: kubeadm init --pod-network-cidr=10.244.0.0/16 >> cluster_initialized.txt
   args:
     chdir: /home/ubuntu
     creates: cluster_initialized.txt
 
-- name: create .kube directory
-  file:
+- name: Create .kube directory
+  ansible.builtin.file:
     path: /home/ubuntu/.kube
     state: directory
-    mode: 0755
+    mode: "0755"
 
-- name: copy admin.conf to user's kube config
+- name: Copy admin.conf to user's kube config
   become: true
-  copy:
+  ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
-    dest: /home/ubuntu/.kube/config ##TODO: fix user here. 
-    remote_src: yes
+    dest: /home/ubuntu/.kube/config # #TODO: fix user here.
+    remote_src: true
     owner: ubuntu
     group: ubuntu
+    mode: '0600'
 
 - name: Add kubeconfig variable to bashrc
   ansible.builtin.lineinfile:

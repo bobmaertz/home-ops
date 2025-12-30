@@ -1,14 +1,15 @@
-- name: Control Installation 
+---
+- name: Control Installation
   ansible.builtin.import_tasks: control.yml
   become: true
 
-- name: Control Firewall Update 
+- name: Control Firewall Update
   ansible.builtin.import_tasks: ufw.yml
   become: true
 
-    #- name: Cillium Installation
-    #ansible.builtin.import_tasks: cillium.yml
-    #become: true
+    # - name: Cillium Installation
+    # ansible.builtin.import_tasks: cillium.yml
+    # become: true
 
 - name: Flannel Installation
   ansible.builtin.import_tasks: flannel.yml

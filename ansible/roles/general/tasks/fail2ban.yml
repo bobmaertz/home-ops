@@ -1,8 +1,8 @@
 ---
 - name: Install fail2ban and sendmail
-  ansible.builtin.apt: 
+  ansible.builtin.apt:
     pkg:
-    - fail2ban
-    - sendmail
-    state: latest
+      - fail2ban
+      - sendmail
+    state: present
     update_cache: true

@@ -1,35 +1,35 @@
 ---
-k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
-k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
-k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
+k8common_k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
+k8common_k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+k8common_k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
 
-marked_packages: 
+k8common_marked_packages:
   - kubeadm
   - kubectl
   - kubelet
 
-packages:
+k8common_packages:
   - kubeadm
   - kubectl
   - kubelet
-  - apt-transport-https 
-  - ca-certificates 
+  - apt-transport-https
+  - ca-certificates
   - curl
-  - socat 
+  - socat
 
-conflicting_packages:
+k8common_conflicting_packages:
   - docker.io
 
-ufw_rules:
-  - proto: tcp 
+k8common_ufw_rules:
+  - proto: tcp
     port: 10250
-    name: "Kubernetes: Kubelet API"   
-  - proto: tcp 
+    name: "Kubernetes: Kubelet API"
+  - proto: tcp
     port: 10248
-    name: "Kubernetes: Kubelet API" 
-  - proto: tcp 
+    name: "Kubernetes: Kubelet API"
+  - proto: tcp
     port: 30000:32767
-    name: "NodePort Services" 
+    name: "NodePort Services"
   - proto: tcp
     port: 7946
     name: "Metallb memberlist traffic"

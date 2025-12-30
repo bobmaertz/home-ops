@@ -1,5 +1,7 @@
-- hosts: docker
+---
+- name: Configure Docker hosts
+  hosts: docker
   become: true
-  roles: 
+  roles:
     - general
-    - geerlingguy.docker 
+    - geerlingguy.docker

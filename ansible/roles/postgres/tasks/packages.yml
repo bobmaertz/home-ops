@@ -1,15 +1,14 @@
 ---
 - name: Update and upgrade apt
-  ansible.builtin.apt: 
+  ansible.builtin.apt:
     clean: true
     autoremove: true
     update_cache: true
     cache_valid_time: 3600
-    upgrade: 'yes'
+    upgrade: "yes"
 
-
-- name: install packages
+- name: Install packages
   ansible.builtin.apt:
-    name: "{{ packages }}"
+    name: "{{ postgres_packages }}"
     state: present
     update_cache: true

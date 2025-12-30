@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Configure all hosts with general settings
+  hosts: all
   become: true
-  roles: 
+  roles:
     - general

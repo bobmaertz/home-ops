@@ -1,3 +1,4 @@
+---
 - name: Update Firewall
   ansible.builtin.import_tasks: ufw.yml
   become: true
