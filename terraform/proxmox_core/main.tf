@@ -1,3 +1,12 @@
+terraform {
+  cloud {
+    organization = "bobmaertz-org"
+
+    workspaces {
+      name = "proxmox-core"
+    }
+  }
+}
 
 module "k8s" {
   source = "./modules/compute_node"

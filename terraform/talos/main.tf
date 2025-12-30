@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+    organization = "bobmaertz-org"
+
+    workspaces {
+      name = "orion-talos-cluster"
+    }
+  }
+
   required_providers {
     talos = {
       source  = "siderolabs/talos"
