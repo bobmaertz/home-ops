@@ -21,13 +21,22 @@ spec:
       labels:
         app: jellyfin
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1002
+        fsGroup: 1002
+        runAsNonRoot: true
       volumes:
       - name: nfs-jellyfin-config
         persistentVolumeClaim:
           claimName: jellyfin-pvc-config
       - name: nfs-jellyfin-data
         persistentVolumeClaim:
-          claimName: jellyfin-pvc-data      
+          claimName: jellyfin-pvc-data
+      - name: cache
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
       containers:
       - env:
         - name: PGID
@@ -66,6 +75,7 @@ spec:
             - ALL
           runAsNonRoot: true
           runAsUser: 1000  # Official image uses 1000 not 1001
+          readOnlyRootFilesystem: true
           seccompProfile:
             type: RuntimeDefault
         volumeMounts:
@@ -73,5 +83,9 @@ spec:
           name: nfs-jellyfin-config
         - mountPath: /data
           name: nfs-jellyfin-data
+        - mountPath: /cache
+          name: cache
+        - mountPath: /tmp
+          name: tmp
       dnsPolicy: ClusterFirst
       restartPolicy: Always
