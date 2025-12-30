@@ -1,22 +1,22 @@
 ---
 - name: Get Kubernetes package key
-  shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
+  ansible.builtin.shell: curl -fsSL {{ k8s_url_apt_key }} | gpg --dearmor -o {{ k8s_gpgpath }}
   args:
     creates: "{{ k8s_gpgpath }}"
 
 - name: Install Kubernetes repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     filename: kubernetes
     repo: "deb [signed-by={{ k8s_gpgpath }}] {{ k8s_repository }} /"
 
-- name: remove conflicting packages 
+- name: Remove conflicting packages
   ansible.builtin.apt:
     name: "{{ conflicting_packages }}"
     state: absent
     update_cache: true
   become: true
 
-- name: install required packages
+- name: Install required packages
   ansible.builtin.apt:
     name: "{{ packages }}"
     state: present
@@ -28,4 +28,3 @@
     name: kubeadm
     selection: hold
   become: true
-

@@ -1,24 +1,21 @@
 ---
-- name: disable swap in runtime
+- name: Disable swap in runtime
   become: true
-  shell: swapoff -a
-
-- name: disable swap permanently 
+  ansible.builtin.command: swapoff -a
+- name: Disable swap permanently
   become: true
-  shell: sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-
+  ansible.builtin.shell: sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 - name: Create /etc/modules-load.d/containerd.conf
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/modules-load.d/containerd.conf"
     content: |
       overlay
       br_netfilter
 
 - name: Create /etc/sysctl.d/kubernetes.conf
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/sysctl.d/kubernetes.conf"
     content: |
       net.bridge.bridge-nf-call-ip6tables = 1
       net.bridge.bridge-nf-call-iptables = 1
       net.ipv4.ip_forward = 1
-

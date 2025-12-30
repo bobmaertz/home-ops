@@ -1,7 +1,7 @@
 ---
 packages:
   - vim
-  - zsh 
+  - zsh
   - qemu-guest-agent
-  - postgresql 
+  - postgresql
   - postgresql-contrib

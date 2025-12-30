@@ -11,4 +11,4 @@
 
 - name: UFW - Set logging
   community.general.ufw:
-    logging: on
+    logging: true

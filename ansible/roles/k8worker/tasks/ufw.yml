@@ -3,7 +3,6 @@
   community.general.ufw:
     rule: allow
     comment: "{{ item.name }}"
-    proto: "{{ item.proto}}"
-    to_port: "{{ item.port}}"
+    proto: "{{ item.proto }}"
+    to_port: "{{ item.port }}"
   with_items: "{{ ufw_rules }}"
-

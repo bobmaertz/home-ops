@@ -1,19 +1,18 @@
 ---
-marked_packages: 
-  #Placeholder
+marked_packages:
+  # Placeholder
 
 packages:
-  #Placeholder
+  # Placeholder
 
 conflicting_packages:
   - docker.io
 
-
 ## TODO: Need to fix this
 ufw_rules:
-  - proto: tcp 
+  - proto: tcp
     port: 10250
-    name: "Kubernetes: Kubelet API"   
+    name: "Kubernetes: Kubelet API"
   - proto: tcp
     port: 30000-32767
     name: "NodePort Services"

@@ -1,12 +1,12 @@
 ---
-- name: retrieve join url
-  shell: kubeadm token create --print-join-command
+- name: Retrieve join url
+  ansible.builtin.command: kubeadm token create --print-join-command
   register: join_output
 
-- name: copy the join command to a local file
-  copy:
+- name: Copy the join command to a local file
+  ansible.builtin.copy:
     content: "{{ join_output.stdout }}"
     dest: "./join.txt"
   delegate_to: localhost
   become: true
-  become_method: sudo 
+  become_method: sudo

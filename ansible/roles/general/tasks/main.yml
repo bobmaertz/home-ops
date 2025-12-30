@@ -1,8 +1,9 @@
+---
 - name: Update and install packages
   ansible.builtin.import_tasks: packages.yml
   become: true
 
-- name: Secure Server 
+- name: Secure Server
   ansible.builtin.import_tasks: fail2ban.yml
   become: true
 

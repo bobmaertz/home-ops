@@ -1,12 +1,13 @@
+---
 - hosts: kcontrol
   become: true
-  roles: 
+  roles:
     - general
     - k8common
     - k8control
 
 - hosts: kworker
   become: true
-  roles: 
+  roles:
     - general
     - k8common
