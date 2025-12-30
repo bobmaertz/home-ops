@@ -20,6 +20,7 @@
     remote_src: true
     owner: ubuntu
     group: ubuntu
+    mode: '0600'
 
 - name: Add kubeconfig variable to bashrc
   ansible.builtin.lineinfile:

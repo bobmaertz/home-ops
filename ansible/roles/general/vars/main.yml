@@ -1,5 +1,5 @@
 ---
-packages:
+general_packages:
   - vim
   - zsh
   - qemu-guest-agent

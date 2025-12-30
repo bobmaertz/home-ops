@@ -1,15 +1,15 @@
 ---
-marked_packages:
+k8worker_marked_packages:
   # Placeholder
 
-packages:
+k8worker_packages:
   # Placeholder
 
-conflicting_packages:
+k8worker_conflicting_packages:
   - docker.io
 
 ## TODO: Need to fix this
-ufw_rules:
+k8worker_ufw_rules:
   - proto: tcp
     port: 10250
     name: "Kubernetes: Kubelet API"

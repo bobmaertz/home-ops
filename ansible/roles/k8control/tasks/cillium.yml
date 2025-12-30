@@ -3,16 +3,18 @@
   ansible.builtin.file:
     path: /tmp/cilium/
     state: directory
+    mode: '0755'
 
 - name: Download cilium cli binary
   ansible.builtin.get_url:
-    url: "https://github.com/cilium/cilium-cli/releases/download/{{ cilium_cli_version }}/cilium-linux-{{ cilium_cli_arch }}.tar.gz"
-    dest: "/tmp/cilium/cilium-linux-{{ cilium_cli_arch }}.tar.gz"
-    checksum: sha256:{{ cilium_cli_checksum }}
+    url: "https://github.com/cilium/cilium-cli/releases/download/{{ k8control_cilium_cli_version }}/cilium-linux-{{ k8control_cilium_cli_arch }}.tar.gz"
+    dest: "/tmp/cilium/cilium-linux-{{ k8control_cilium_cli_arch }}.tar.gz"
+    checksum: sha256:{{ k8control_cilium_cli_checksum }}
+    mode: '0644'
 
 - name: Unarchive the cilium that needs to be downloaded (added in 2.0)
   ansible.builtin.unarchive:
-    src: "/tmp/cilium/cilium-linux-{{ cilium_cli_arch }}.tar.gz"
+    src: "/tmp/cilium/cilium-linux-{{ k8control_cilium_cli_arch }}.tar.gz"
     dest: /usr/local/bin
     remote_src: true
 

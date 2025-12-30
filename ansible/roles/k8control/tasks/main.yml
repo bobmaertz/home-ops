@@ -7,9 +7,9 @@
   ansible.builtin.import_tasks: ufw.yml
   become: true
 
-    #- name: Cillium Installation
-    #ansible.builtin.import_tasks: cillium.yml
-    #become: true
+    # - name: Cillium Installation
+    # ansible.builtin.import_tasks: cillium.yml
+    # become: true
 
 - name: Flannel Installation
   ansible.builtin.import_tasks: flannel.yml

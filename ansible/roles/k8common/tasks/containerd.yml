@@ -1,11 +1,17 @@
 ---
 - name: Update etc/containerd/config.yml - set SystemdCgroup = true
   become: true
-  ansible.builtin.command: sudo sed -i 's/            SystemdCgroup = false/            SystemdCgroup = true/' /etc/containerd/config.toml
+  ansible.builtin.lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^\s*SystemdCgroup = false'
+    line: '            SystemdCgroup = true'
+
 - name: Update containerd v1 cri sandbox_image from 3.8 to 3.10
   become: true
-  ansible.builtin.command: sudo sed -i 's#    sandbox_image = "registry.k8s.io/pause:3.8"#    sandbox_image = "registry.k8s.io/pause:3.10"#'
-    /etc/containerd/config.toml
+  ansible.builtin.lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^\s*sandbox_image = "registry.k8s.io/pause:3.8"'
+    line: '    sandbox_image = "registry.k8s.io/pause:3.10"'
 - name: Restart containerd
   ansible.builtin.systemd_service:
     name: containerd.service

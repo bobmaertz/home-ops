@@ -1,5 +1,6 @@
 ---
-- hosts: docker
+- name: Configure Docker hosts
+  hosts: docker
   become: true
   roles:
     - general

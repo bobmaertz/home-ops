@@ -1,14 +1,14 @@
 ---
-k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
-k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
-k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
+k8common_k8s_url_apt_key: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key"
+k8common_k8s_gpgpath: /usr/share/keyrings/kubernetes-apt-keyring.gpg
+k8common_k8s_repository: "https://pkgs.k8s.io/core:/stable:/v1.31/deb/"
 
-marked_packages:
+k8common_marked_packages:
   - kubeadm
   - kubectl
   - kubelet
 
-packages:
+k8common_packages:
   - kubeadm
   - kubectl
   - kubelet
@@ -17,10 +17,10 @@ packages:
   - curl
   - socat
 
-conflicting_packages:
+k8common_conflicting_packages:
   - docker.io
 
-ufw_rules:
+k8common_ufw_rules:
   - proto: tcp
     port: 10250
     name: "Kubernetes: Kubelet API"

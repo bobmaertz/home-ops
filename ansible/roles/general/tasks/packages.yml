@@ -9,6 +9,6 @@
 
 - name: Install packages
   ansible.builtin.apt:
-    name: "{{ packages }}"
+    name: "{{ general_packages }}"
     state: present
     update_cache: true

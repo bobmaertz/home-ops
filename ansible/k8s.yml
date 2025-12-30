@@ -1,12 +1,14 @@
 ---
-- hosts: kcontrol
+- name: Configure Kubernetes control plane nodes
+  hosts: kcontrol
   become: true
   roles:
     - general
     - k8common
     - k8control
 
-- hosts: kworker
+- name: Configure Kubernetes worker nodes
+  hosts: kworker
   become: true
   roles:
     - general
