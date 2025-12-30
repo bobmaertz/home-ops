@@ -17,6 +17,13 @@ spec:
       values: |
         nodeExporter:
           enabled: false
+        server:
+          persistentVolume:
+            enabled: true
+            storageClass: "longhorn"
+            size: 32Gi
+            accessModes:
+              - ReadWriteOnce
         extraScrapeConfigs: |
           - job_name: 'Proxmox-Curiosity'
             metrics_path: /pve
@@ -40,4 +47,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - PruneLast=true
-      - ApplyOutOfSyncOnly=true
+      - Replace=true
