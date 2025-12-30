@@ -1,0 +1,8 @@
+# Trivy vulnerability exceptions for home-ops repository
+# Format: AVD-ID or CVE-ID (one per line)
+
+# AVD-KSV-0125: Untrusted Registry - Jellyfin official image
+# Justification: jellyfin/jellyfin is the official image from Docker Hub
+# Risk Level: MEDIUM - Acceptable for homelab environment
+# File: kubernetes/orion/manifests/default/jellyfin/jellyfin-deployment.yaml
+AVD-KSV-0125
