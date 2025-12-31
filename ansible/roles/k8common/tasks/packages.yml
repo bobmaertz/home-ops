@@ -39,6 +39,7 @@
 
 - name: Hold specific packages to prevent upgrade
   ansible.builtin.dpkg_selections:
-    name: kubeadm
+    name: "{{ item }}"
     selection: hold
+  loop: "{{ k8common_marked_packages }}"
   become: true
