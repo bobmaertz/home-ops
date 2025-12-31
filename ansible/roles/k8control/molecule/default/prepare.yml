@@ -2,6 +2,16 @@
 - name: Prepare
   hosts: all
   tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install UFW for testing
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+
     - name: Create ubuntu user for testing
       ansible.builtin.user:
         name: ubuntu
