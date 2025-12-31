@@ -4,12 +4,6 @@
     name: kubelet
     state: restarted
 
-- name: Restart kube-apiserver
-  ansible.builtin.systemd_service:
-    name: kube-apiserver
-    state: restarted
-  ignore_errors: true  # May not be a systemd service
-
 - name: Wait for API server
   ansible.builtin.wait_for:
     port: 6443
