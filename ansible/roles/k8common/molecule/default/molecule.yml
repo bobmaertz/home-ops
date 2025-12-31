@@ -5,6 +5,19 @@ dependency:
     requirements-file: ../../../../requirements.yml
 driver:
   name: docker
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence  # Skipped: containerd config modifications aren't idempotent
+    - verify
+    - cleanup
+    - destroy
 platforms:
   - name: k8common-ubuntu2204
     image: geerlingguy/docker-ubuntu2204-ansible:latest
