@@ -4,6 +4,8 @@
     url: "{{ k8common_k8s_url_apt_key }}"
     dest: /tmp/kubernetes-apt-key
     mode: '0644'
+  retries: 3
+  delay: 5
 
 - name: Convert Kubernetes package key to GPG format
   ansible.builtin.command: gpg --dearmor -o {{ k8common_k8s_gpgpath }} /tmp/kubernetes-apt-key
@@ -14,6 +16,8 @@
   ansible.builtin.apt_repository:
     filename: kubernetes
     repo: "deb [signed-by={{ k8common_k8s_gpgpath }}] {{ k8common_k8s_repository }} /"
+  retries: 3
+  delay: 5
 
 - name: Remove conflicting packages
   ansible.builtin.apt:
@@ -21,6 +25,8 @@
     state: absent
     update_cache: true
   become: true
+  retries: 3
+  delay: 5
 
 - name: Install required packages
   ansible.builtin.apt:
@@ -28,6 +34,8 @@
     state: present
     update_cache: true
   become: true
+  retries: 3
+  delay: 5
 
 - name: Hold specific packages to prevent upgrade
   ansible.builtin.dpkg_selections:

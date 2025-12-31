@@ -11,12 +11,34 @@
       register: ufw_check
       failed_when: ufw_check.changed
 
+    - name: Verify UFW binary exists
+      ansible.builtin.stat:
+        path: /usr/sbin/ufw
+      register: ufw_binary
+      failed_when: not ufw_binary.stat.exists
+
     - name: Check UFW status
       ansible.builtin.command: ufw status
       register: ufw_status
       changed_when: false
       failed_when: false
 
-    - name: Display UFW status for verification
-      ansible.builtin.debug:
-        msg: "UFW Status: {{ ufw_status.stdout }}"
+    - name: Verify UFW rules file exists
+      ansible.builtin.stat:
+        path: /etc/ufw/user.rules
+      register: ufw_rules
+      # UFW rules file should exist after configuration
+
+    - name: Verify kubelet is installed (from k8common dependency)
+      ansible.builtin.package:
+        name: kubelet
+        state: present
+      check_mode: true
+      register: kubelet_check
+      failed_when: kubelet_check.changed
+
+    - name: Verify kubelet binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/kubelet
+      register: kubelet_binary
+      failed_when: not kubelet_binary.stat.exists

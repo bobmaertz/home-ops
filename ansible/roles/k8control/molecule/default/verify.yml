@@ -12,30 +12,54 @@
 
     - name: Verify .kube directory exists
       ansible.builtin.stat:
-        path: /home/ubuntu/.kube
+        path: "{{ ansible_user_dir }}/.kube"
       register: kube_dir
       failed_when: not kube_dir.stat.exists or not kube_dir.stat.isdir
 
     - name: Verify kubeconfig file exists
       ansible.builtin.stat:
-        path: /home/ubuntu/.kube/config
+        path: "{{ ansible_user_dir }}/.kube/config"
       register: kubeconfig
       failed_when: not kubeconfig.stat.exists
 
     - name: Verify kubeconfig has correct permissions
       ansible.builtin.stat:
-        path: /home/ubuntu/.kube/config
+        path: "{{ ansible_user_dir }}/.kube/config"
       register: kubeconfig_perms
       failed_when: kubeconfig_perms.stat.mode != '0600'
 
     - name: Verify KUBECONFIG export in bashrc
-      ansible.builtin.shell: grep "export KUBECONFIG" /home/ubuntu/.bashrc
+      ansible.builtin.shell: grep "export KUBECONFIG" "{{ ansible_user_dir }}/.bashrc"
       register: bashrc_check
       changed_when: false
       failed_when: bashrc_check.rc != 0
 
     - name: Verify cluster initialization marker exists
       ansible.builtin.stat:
-        path: /home/ubuntu/cluster_initialized.txt
+        path: "{{ ansible_user_dir }}/cluster_initialized.txt"
       register: cluster_init
       failed_when: not cluster_init.stat.exists
+
+    - name: Verify .kube directory ownership
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.kube"
+      register: kube_dir_owner
+      failed_when: kube_dir_owner.stat.pw_name != ansible_user_id
+
+    - name: Verify kubeconfig ownership
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.kube/config"
+      register: kubeconfig_owner
+      failed_when: kubeconfig_owner.stat.pw_name != ansible_user_id
+
+    - name: Verify kubectl command exists
+      ansible.builtin.command: which kubectl
+      register: kubectl_which
+      changed_when: false
+      failed_when: kubectl_which.rc != 0
+
+    - name: Verify kubeadm command exists
+      ansible.builtin.command: which kubeadm
+      register: kubeadm_which
+      changed_when: false
+      failed_when: kubeadm_which.rc != 0

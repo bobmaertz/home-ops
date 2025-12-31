@@ -67,3 +67,27 @@
       register: kubeadm_hold
       changed_when: false
       failed_when: kubeadm_hold.rc != 0
+
+    - name: Verify Kubernetes repository was added
+      ansible.builtin.stat:
+        path: /etc/apt/sources.list.d/kubernetes.list
+      register: k8s_repo
+      failed_when: not k8s_repo.stat.exists
+
+    - name: Verify kubectl binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/kubectl
+      register: kubectl_binary
+      failed_when: not kubectl_binary.stat.exists
+
+    - name: Verify kubeadm binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/kubeadm
+      register: kubeadm_binary
+      failed_when: not kubeadm_binary.stat.exists
+
+    - name: Verify kubelet binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/kubelet
+      register: kubelet_binary
+      failed_when: not kubelet_binary.stat.exists

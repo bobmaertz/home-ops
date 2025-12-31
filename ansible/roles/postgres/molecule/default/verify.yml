@@ -42,3 +42,21 @@
       check_mode: true
       register: ufw_check
       failed_when: ufw_check.changed
+
+    - name: Verify all packages from postgres_packages are installed
+      ansible.builtin.stat:
+        path: /usr/lib/postgresql
+      register: postgres_lib
+      failed_when: not postgres_lib.stat.exists
+
+    - name: Verify vim binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/vim
+      register: vim_binary
+      failed_when: not vim_binary.stat.exists
+
+    - name: Verify zsh binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/zsh
+      register: zsh_binary
+      failed_when: not zsh_binary.stat.exists

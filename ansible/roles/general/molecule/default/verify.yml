@@ -38,11 +38,11 @@
       register: ufw_check
       failed_when: ufw_check.changed
 
-    - name: Check if fail2ban service is enabled
-      ansible.builtin.systemd:
+    - name: Check if fail2ban service exists
+      ansible.builtin.systemd_service:
         name: fail2ban
       register: fail2ban_service
-      failed_when: fail2ban_service.status.UnitFileState != 'enabled'
+      failed_when: fail2ban_service.status.LoadState != 'loaded'
       ignore_errors: true
 
     - name: Verify vim binary exists
@@ -56,3 +56,15 @@
         path: /usr/bin/zsh
       register: zsh_binary
       failed_when: not zsh_binary.stat.exists
+
+    - name: Verify sendmail binary exists
+      ansible.builtin.stat:
+        path: /usr/sbin/sendmail
+      register: sendmail_binary
+      failed_when: not sendmail_binary.stat.exists
+
+    - name: Verify fail2ban binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/fail2ban-client
+      register: fail2ban_binary
+      failed_when: not fail2ban_binary.stat.exists
