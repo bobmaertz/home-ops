@@ -7,7 +7,10 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: Install UFW for testing
+    - name: Install system packages required for testing
       ansible.builtin.apt:
-        name: ufw
+        name:
+          - ufw
+          - openssh-server
+          - iptables
         state: present
