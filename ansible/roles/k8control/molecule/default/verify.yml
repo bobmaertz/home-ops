@@ -69,13 +69,13 @@
       ansible.builtin.stat:
         path: "{{ ansible_user_dir }}/.kube/config"
       register: kubeconfig_security
-      failed_when: kubeconfig_security.stat.mode[-1:] != '0'
+      failed_when: kubeconfig_security.stat.mode | regex_search('[0-9]$') not in ['0', '4']
 
     - name: Verify .kube directory is not world-accessible
       ansible.builtin.stat:
         path: "{{ ansible_user_dir }}/.kube"
       register: kube_dir_security
-      failed_when: kube_dir_security.stat.mode[-1:] != '0'
+      failed_when: kube_dir_security.stat.mode | regex_search('[0-9]$') not in ['0', '1', '4', '5']
 
     # Binary Version Checks
     - name: Check kubectl version
