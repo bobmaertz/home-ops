@@ -5,4 +5,4 @@
     comment: "{{ item.name }}"
     proto: "{{ item.proto }}"
     to_port: "{{ item.port }}"
-  with_items: "{{ k8common_ufw_rules }}"
+  loop: "{{ k8common_ufw_rules }}"

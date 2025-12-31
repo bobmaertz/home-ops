@@ -1,0 +1,14 @@
+---
+# PostgreSQL and system packages
+postgres_packages:
+  - vim
+  - zsh
+  - qemu-guest-agent
+  - postgresql
+  - postgresql-contrib
+
+# PostgreSQL version (set by package manager)
+postgres_version: "14"
+
+# PostgreSQL data directory
+postgres_data_dir: /var/lib/postgresql

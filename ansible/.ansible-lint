@@ -1,0 +1,17 @@
+# Ansible-lint configuration
+---
+# Exclude paths
+exclude_paths:
+  - .molecule/
+  - .cache/
+  - molecule/  # Exclude all molecule test files
+
+# Skip specific rules
+skip_list:
+  - role-name  # Skip Galaxy role naming requirements
+  - galaxy[version-incorrect]  # Skip Galaxy version checks
+  - galaxy[no-changelog]  # Skip changelog requirements
+
+# Optionally set warn_list instead to see warnings but not fail
+# warn_list:
+#   - role-name

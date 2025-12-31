@@ -1,0 +1,21 @@
+---
+# Packages to mark as held (prevent upgrades)
+k8worker_marked_packages:
+  # Placeholder - inherited from k8common
+
+# Required packages
+k8worker_packages:
+  # Placeholder - inherited from k8common
+
+# Packages that conflict with Kubernetes
+k8worker_conflicting_packages:
+  - docker.io
+
+# UFW firewall rules for worker nodes
+k8worker_ufw_rules:
+  - proto: tcp
+    port: "10250"
+    name: "Kubernetes: Kubelet API"
+  - proto: tcp
+    port: "30000:32767"
+    name: "NodePort Services"

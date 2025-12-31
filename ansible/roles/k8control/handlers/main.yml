@@ -1,0 +1,10 @@
+---
+- name: Restart kubelet
+  ansible.builtin.systemd_service:
+    name: kubelet
+    state: restarted
+
+- name: Wait for API server
+  ansible.builtin.wait_for:
+    port: 6443
+    timeout: 60
