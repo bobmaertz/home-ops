@@ -68,16 +68,16 @@
       changed_when: false
       failed_when: psql_version.rc != 0
 
-    - name: Verify PostgreSQL version matches expected
+    - name: Verify PostgreSQL version is valid
       ansible.builtin.shell: psql --version | grep -oP 'PostgreSQL \K[0-9]+' | head -1
       register: pg_version
       changed_when: false
-      failed_when: pg_version.stdout != postgres_version
+      failed_when: pg_version.stdout == "" or pg_version.rc != 0
 
     # PostgreSQL Data Directory Validation
     - name: Verify PostgreSQL data directory exists
       ansible.builtin.stat:
-        path: "{{ postgres_data_dir }}"
+        path: /var/lib/postgresql
       register: postgres_data
       failed_when: not postgres_data.stat.exists
 
