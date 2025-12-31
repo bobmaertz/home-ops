@@ -91,3 +91,62 @@
         path: /usr/bin/kubelet
       register: kubelet_binary
       failed_when: not kubelet_binary.stat.exists
+
+    # Configuration Content Validation
+    - name: Verify containerd uses systemd cgroup
+      ansible.builtin.shell: grep 'SystemdCgroup = true' /etc/containerd/config.toml
+      register: systemd_cgroup
+      changed_when: false
+      failed_when: systemd_cgroup.rc != 0
+
+    - name: Verify containerd sandbox image version
+      ansible.builtin.shell: grep 'sandbox_image.*3.10' /etc/containerd/config.toml
+      register: sandbox_image
+      changed_when: false
+      failed_when: sandbox_image.rc != 0
+
+    - name: Verify overlay module in config
+      ansible.builtin.shell: grep '^overlay$' /etc/modules-load.d/containerd.conf
+      register: overlay_module
+      changed_when: false
+      failed_when: overlay_module.rc != 0
+
+    - name: Verify br_netfilter module in config
+      ansible.builtin.shell: grep '^br_netfilter$' /etc/modules-load.d/containerd.conf
+      register: br_netfilter_module
+      changed_when: false
+      failed_when: br_netfilter_module.rc != 0
+
+    - name: Verify sysctl net.bridge.bridge-nf-call-iptables
+      ansible.builtin.shell: sysctl -n net.bridge.bridge-nf-call-iptables 2>/dev/null || echo "0"
+      register: bridge_iptables
+      changed_when: false
+      failed_when: bridge_iptables.stdout != "1"
+      ignore_errors: true  # May fail in containers
+
+    - name: Verify sysctl net.ipv4.ip_forward
+      ansible.builtin.shell: sysctl -n net.ipv4.ip_forward 2>/dev/null || echo "0"
+      register: ip_forward
+      changed_when: false
+      failed_when: ip_forward.stdout != "1"
+      ignore_errors: true  # May fail in containers
+
+    # Package Hold Verification
+    - name: Verify kubectl package is on hold
+      ansible.builtin.shell: apt-mark showhold | grep kubectl
+      register: kubectl_hold
+      changed_when: false
+      failed_when: kubectl_hold.rc != 0
+
+    - name: Verify kubelet package is on hold
+      ansible.builtin.shell: apt-mark showhold | grep kubelet
+      register: kubelet_hold
+      changed_when: false
+      failed_when: kubelet_hold.rc != 0
+
+    # Repository Content Verification
+    - name: Verify Kubernetes repository content
+      ansible.builtin.shell: grep 'pkgs.k8s.io/core:/stable:/v1.31/deb' /etc/apt/sources.list.d/kubernetes.list
+      register: k8s_repo_content
+      changed_when: false
+      failed_when: k8s_repo_content.rc != 0

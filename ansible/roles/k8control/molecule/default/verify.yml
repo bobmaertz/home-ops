@@ -63,3 +63,29 @@
       register: kubeadm_which
       changed_when: false
       failed_when: kubeadm_which.rc != 0
+
+    # Security & Permissions Validation
+    - name: Verify kubeconfig is not world-readable
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.kube/config"
+      register: kubeconfig_security
+      failed_when: kubeconfig_security.stat.mode[-1:] != '0'
+
+    - name: Verify .kube directory is not world-accessible
+      ansible.builtin.stat:
+        path: "{{ ansible_user_dir }}/.kube"
+      register: kube_dir_security
+      failed_when: kube_dir_security.stat.mode[-1:] != '0'
+
+    # Binary Version Checks
+    - name: Check kubectl version
+      ansible.builtin.shell: kubectl version --client --short 2>/dev/null || kubectl version --client
+      register: kubectl_ver
+      changed_when: false
+      failed_when: kubectl_ver.rc != 0
+
+    - name: Check kubeadm version
+      ansible.builtin.shell: kubeadm version -o short
+      register: kubeadm_ver
+      changed_when: false
+      failed_when: kubeadm_ver.rc != 0

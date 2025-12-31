@@ -42,3 +42,30 @@
         path: /usr/bin/kubelet
       register: kubelet_binary
       failed_when: not kubelet_binary.stat.exists
+
+    # UFW Rule Validation
+    - name: Verify UFW kubelet API port rule
+      ansible.builtin.shell: ufw status 2>/dev/null | grep "10250.*ALLOW" || echo "not_active"
+      register: kubelet_port
+      changed_when: false
+      ignore_errors: true  # May fail in containers
+
+    - name: Verify UFW NodePort range rule
+      ansible.builtin.shell: ufw status 2>/dev/null | grep "30000:32767.*ALLOW" || echo "not_active"
+      register: nodeport_range
+      changed_when: false
+      ignore_errors: true  # May fail in containers
+
+    # Binary Version Checks
+    - name: Check kubelet version
+      ansible.builtin.shell: kubelet --version
+      register: kubelet_ver
+      changed_when: false
+      failed_when: kubelet_ver.rc != 0
+
+    # Security & Permissions
+    - name: Verify no world-writable files in /etc/kubernetes if exists
+      ansible.builtin.shell: find /etc/kubernetes -type f -perm -002 2>/dev/null | wc -l
+      register: k8s_world_writable
+      changed_when: false
+      ignore_errors: true

@@ -1,0 +1,36 @@
+---
+# Kubernetes control plane configuration
+k8control_username: k8s
+
+# Cilium CLI configuration
+k8control_cilium_cli_arch: amd64
+k8control_cilium_cli_version: v0.16.18
+k8control_cilium_cli_checksum: aa77d11150fac1e59431e5a50d5977219aae6c4bd9ccb051899c2ab99256f30e
+
+# Required packages for control plane
+k8control_packages:
+  - kubeadm
+  - kubectl
+  - kubelet
+
+# Packages that conflict with Kubernetes
+k8control_conflicting_packages:
+  - docker.io
+
+# UFW firewall rules for control plane
+k8control_ufw_rules:
+  - proto: tcp
+    port: "6443"
+    name: "Kubernetes: API server"
+  - proto: tcp
+    port: "2379:2381"
+    name: "Kubernetes: etcd server client API"
+  - proto: tcp
+    port: "10259"
+    name: "Kubernetes: kube-scheduler"
+  - proto: tcp
+    port: "10257"
+    name: "Kubernetes: kube-controller-manager"
+
+# Pod network CIDR
+k8control_pod_network_cidr: 10.244.0.0/16
