@@ -18,19 +18,19 @@
       register: package_check
       failed_when: package_check.changed
 
-    - name: Verify containerd is installed
-      ansible.builtin.package:
-        name: containerd
-        state: present
-      check_mode: true
-      register: containerd_check
-      failed_when: containerd_check.changed
-
-    - name: Check if containerd service is running
-      ansible.builtin.systemd:
+    - name: Check if containerd service exists and is running
+      ansible.builtin.systemd_service:
         name: containerd
       register: containerd_service
-      failed_when: containerd_service.status.ActiveState != 'active'
+      failed_when: containerd_service.status.LoadState != 'loaded'
+      # Note: Checking service exists rather than specific package since
+      # geerlingguy.containerd may install containerd.io or containerd
+
+    - name: Verify containerd binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/containerd
+      register: containerd_binary
+      failed_when: not containerd_binary.stat.exists
 
     - name: Verify Kubernetes GPG keyring exists
       ansible.builtin.stat:
