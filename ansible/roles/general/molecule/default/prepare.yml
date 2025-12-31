@@ -1,0 +1,16 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install system packages required for testing
+      ansible.builtin.apt:
+        name:
+          - ufw
+          - openssh-server  # Provides OpenSSH UFW profile
+          - iptables        # Required by UFW
+        state: present

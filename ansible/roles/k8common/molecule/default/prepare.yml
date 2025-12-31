@@ -1,0 +1,21 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install system packages required for testing
+      ansible.builtin.apt:
+        name:
+          - ufw
+          - openssh-server
+          - iptables
+          - gpg  # Required for Kubernetes GPG key handling
+        state: present
+
+    - name: Install general role first (dependency)
+      ansible.builtin.include_role:
+        name: general

@@ -1,0 +1,72 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install system packages required for testing
+      ansible.builtin.apt:
+        name:
+          - ufw
+          - openssh-server
+          - iptables
+          - gpg
+        state: present
+
+    - name: Create ubuntu user for testing
+      ansible.builtin.user:
+        name: ubuntu
+        state: present
+        create_home: true
+        shell: /bin/bash
+
+    - name: Install k8common role dependencies
+      ansible.builtin.include_role:
+        name: geerlingguy.containerd
+
+    - name: Apply k8common role
+      ansible.builtin.include_role:
+        name: k8common
+
+    - name: Create mock kubernetes directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - /etc/kubernetes
+        - /etc/kubernetes/manifests
+        - /etc/kubernetes/pki
+
+    - name: Create mock admin.conf for testing
+      ansible.builtin.copy:
+        dest: /etc/kubernetes/admin.conf
+        mode: '0600'
+        content: |
+          apiVersion: v1
+          kind: Config
+          clusters:
+          - cluster:
+              server: https://127.0.0.1:6443
+            name: kubernetes
+          contexts:
+          - context:
+              cluster: kubernetes
+              user: kubernetes-admin
+            name: kubernetes-admin@kubernetes
+          current-context: kubernetes-admin@kubernetes
+
+    - name: Mock kubeadm and kubectl commands
+      ansible.builtin.copy:
+        dest: "/usr/local/bin/{{ item }}"
+        mode: '0755'
+        content: |
+          #!/bin/bash
+          echo "Mock {{ item }} - skipping actual execution in test"
+          exit 0
+      loop:
+        - kubeadm
+        - kubectl

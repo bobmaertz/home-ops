@@ -1,0 +1,22 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify ufw is installed
+      ansible.builtin.package:
+        name: ufw
+        state: present
+      check_mode: true
+      register: ufw_check
+      failed_when: ufw_check.changed
+
+    - name: Check UFW status
+      ansible.builtin.command: ufw status
+      register: ufw_status
+      changed_when: false
+      failed_when: false
+
+    - name: Display UFW status for verification
+      ansible.builtin.debug:
+        msg: "UFW Status: {{ ufw_status.stdout }}"

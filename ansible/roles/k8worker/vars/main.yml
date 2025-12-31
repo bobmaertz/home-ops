@@ -11,8 +11,8 @@ k8worker_conflicting_packages:
 ## TODO: Need to fix this
 k8worker_ufw_rules:
   - proto: tcp
-    port: 10250
+    port: "10250"
     name: "Kubernetes: Kubelet API"
   - proto: tcp
-    port: 30000-32767
+    port: "30000:32767"
     name: "NodePort Services"

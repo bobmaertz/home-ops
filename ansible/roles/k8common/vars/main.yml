@@ -22,17 +22,17 @@ k8common_conflicting_packages:
 
 k8common_ufw_rules:
   - proto: tcp
-    port: 10250
+    port: "10250"
     name: "Kubernetes: Kubelet API"
   - proto: tcp
-    port: 10248
+    port: "10248"
     name: "Kubernetes: Kubelet API"
   - proto: tcp
-    port: 30000:32767
+    port: "30000:32767"
     name: "NodePort Services"
   - proto: tcp
-    port: 7946
+    port: "7946"
     name: "Metallb memberlist traffic"
   - proto: udp
-    port: 7946
+    port: "7946"
     name: "Metallb memberlist traffic"

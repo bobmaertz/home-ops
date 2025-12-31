@@ -1,9 +1,9 @@
 ---
 galaxy_info:
-  role_name: k8worker
+  role_name: general
   namespace: bobmaertz
   author: Bob Maertz
-  description: Kubernetes worker node configuration
+  description: General server configuration and security hardening
   license: MIT
   min_ansible_version: "2.15"
   platforms:
@@ -12,5 +12,4 @@ galaxy_info:
         - jammy
         - focal
 
-dependencies:
-  - role: k8common
+dependencies: []

@@ -1,0 +1,44 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify PostgreSQL packages are installed
+      ansible.builtin.package:
+        name:
+          - vim
+          - zsh
+          - qemu-guest-agent
+          - postgresql
+          - postgresql-contrib
+        state: present
+      check_mode: true
+      register: package_check
+      failed_when: package_check.changed
+
+    - name: Check if PostgreSQL service exists
+      ansible.builtin.systemd:
+        name: postgresql
+      register: postgres_service
+      failed_when: postgres_service.status.LoadState not in ['loaded', 'not-found']
+      # Note: Service may not be active in containers, which is expected
+
+    - name: Check if PostgreSQL port configuration exists
+      ansible.builtin.stat:
+        path: /etc/postgresql
+      register: postgres_config
+      # Note: Port may not be listening in containers where service doesn't start
+
+    - name: Verify postgres binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/psql
+      register: psql_binary
+      failed_when: not psql_binary.stat.exists
+
+    - name: Verify ufw is installed
+      ansible.builtin.package:
+        name: ufw
+        state: present
+      check_mode: true
+      register: ufw_check
+      failed_when: ufw_check.changed

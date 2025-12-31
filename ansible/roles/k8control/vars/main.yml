@@ -15,14 +15,14 @@ k8control_conflicting_packages:
 
 k8control_ufw_rules:
   - proto: tcp
-    port: 6443
+    port: "6443"
     name: "Kubernetes: API server"
   - proto: tcp
-    port: 2379:2381
+    port: "2379:2381"
     name: "Kubernetes: etcd server client API"
   - proto: tcp
-    port: 10259
+    port: "10259"
     name: "Kubernetes: kube-scheduler"
   - proto: tcp
-    port: 10257
+    port: "10257"
     name: "Kubernetes: kube-controller-manager"
