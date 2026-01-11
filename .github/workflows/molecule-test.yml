@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload Molecule logs on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: molecule-logs-${{ matrix.role }}
           path: |
