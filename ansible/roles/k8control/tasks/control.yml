@@ -3,12 +3,12 @@
   become: true
   ansible.builtin.shell: kubeadm init --pod-network-cidr=10.244.0.0/16 >> cluster_initialized.txt
   args:
-    chdir: /home/ubuntu
+    chdir: "{{ ansible_user_dir }}"
     creates: cluster_initialized.txt
 
 - name: Create .kube directory
   ansible.builtin.file:
-    path: /home/ubuntu/.kube
+    path: "{{ ansible_user_dir }}/.kube"
     state: directory
     mode: "0755"
 
@@ -16,13 +16,13 @@
   become: true
   ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
-    dest: /home/ubuntu/.kube/config # #TODO: fix user here.
+    dest: "{{ ansible_user_dir }}/.kube/config"
     remote_src: true
-    owner: ubuntu
-    group: ubuntu
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
     mode: '0600'
 
 - name: Add kubeconfig variable to bashrc
   ansible.builtin.lineinfile:
-    path: /home/ubuntu/.bashrc
+    path: "{{ ansible_user_dir }}/.bashrc"
     line: "export KUBECONFIG=~/.kube/config"

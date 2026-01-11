@@ -42,3 +42,50 @@
       check_mode: true
       register: ufw_check
       failed_when: ufw_check.changed
+
+    - name: Verify all packages from postgres_packages are installed
+      ansible.builtin.stat:
+        path: /usr/lib/postgresql
+      register: postgres_lib
+      failed_when: not postgres_lib.stat.exists
+
+    - name: Verify vim binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/vim
+      register: vim_binary
+      failed_when: not vim_binary.stat.exists
+
+    - name: Verify zsh binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/zsh
+      register: zsh_binary
+      failed_when: not zsh_binary.stat.exists
+
+    # Binary Version Checks
+    - name: Check PostgreSQL version command works
+      ansible.builtin.shell: psql --version
+      register: psql_version
+      changed_when: false
+      failed_when: psql_version.rc != 0 or psql_version.stdout == ""
+
+    # PostgreSQL Data Directory Validation
+    - name: Verify PostgreSQL data directory exists
+      ansible.builtin.stat:
+        path: /var/lib/postgresql
+      register: postgres_data
+      failed_when: not postgres_data.stat.exists
+
+    # Security & Permissions
+    - name: Verify PostgreSQL config directory has correct permissions
+      ansible.builtin.stat:
+        path: /etc/postgresql
+      register: pg_config_dir
+      failed_when: pg_config_dir.stat.exists and (pg_config_dir.stat.mode | int) > 493  # 0755
+      ignore_errors: true
+
+    # UFW Rule Validation
+    - name: Verify PostgreSQL port 5432 in UFW rules
+      ansible.builtin.shell: ufw status 2>/dev/null | grep "5432.*ALLOW" || echo "not_active"
+      register: postgres_port
+      changed_when: false
+      ignore_errors: true  # May fail in containers

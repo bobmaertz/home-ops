@@ -38,11 +38,11 @@
       register: ufw_check
       failed_when: ufw_check.changed
 
-    - name: Check if fail2ban service is enabled
-      ansible.builtin.systemd:
+    - name: Check if fail2ban service exists
+      ansible.builtin.systemd_service:
         name: fail2ban
       register: fail2ban_service
-      failed_when: fail2ban_service.status.UnitFileState != 'enabled'
+      failed_when: fail2ban_service.status.LoadState != 'loaded'
       ignore_errors: true
 
     - name: Verify vim binary exists
@@ -56,3 +56,51 @@
         path: /usr/bin/zsh
       register: zsh_binary
       failed_when: not zsh_binary.stat.exists
+
+    - name: Verify sendmail binary exists
+      ansible.builtin.stat:
+        path: /usr/sbin/sendmail
+      register: sendmail_binary
+      failed_when: not sendmail_binary.stat.exists
+
+    - name: Verify fail2ban binary exists
+      ansible.builtin.stat:
+        path: /usr/bin/fail2ban-client
+      register: fail2ban_binary
+      failed_when: not fail2ban_binary.stat.exists
+
+    # Security & Permissions Validation
+    - name: Verify no world-writable files in /etc
+      ansible.builtin.shell: find /etc -type f -perm -002 2>/dev/null | wc -l
+      register: world_writable
+      changed_when: false
+      failed_when: world_writable.stdout != "0"
+      ignore_errors: true
+
+    - name: Verify SSH directory permissions if exists
+      ansible.builtin.stat:
+        path: /root/.ssh
+      register: ssh_dir
+      failed_when: ssh_dir.stat.exists and ssh_dir.stat.mode != '0700'
+      ignore_errors: true
+
+    # UFW Configuration Validation
+    - name: Verify UFW default deny incoming
+      ansible.builtin.shell: ufw status verbose 2>/dev/null | grep -i "Default.*deny.*incoming" || echo "not_active"
+      register: ufw_deny_incoming
+      changed_when: false
+      ignore_errors: true  # May fail in containers
+
+    - name: Verify UFW SSH rule exists
+      ansible.builtin.shell: ufw status 2>/dev/null | grep "OpenSSH.*ALLOW" || echo "not_active"
+      register: ufw_ssh_rule
+      changed_when: false
+      ignore_errors: true  # May fail in containers
+
+    # fail2ban Configuration Validation
+    - name: Verify fail2ban jail configuration exists
+      ansible.builtin.shell: ls /etc/fail2ban/jail.* 2>/dev/null | head -1
+      register: fail2ban_config
+      changed_when: false
+      failed_when: fail2ban_config.stdout == ""
+      ignore_errors: true

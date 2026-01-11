@@ -1,0 +1,6 @@
+---
+# Default packages to install on all nodes
+general_packages:
+  - vim
+  - zsh
+  - qemu-guest-agent
