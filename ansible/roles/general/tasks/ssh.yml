@@ -57,12 +57,18 @@
     group: root
     mode: '0600'
 
+- name: SSH - Find SSH host keys
+  ansible.builtin.find:
+    paths: /etc/ssh
+    patterns: 'ssh_host_*_key'
+    file_type: file
+  register: ssh_host_keys
+
 - name: SSH - Ensure SSH host keys have correct permissions
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     owner: root
     group: root
     mode: '0600'
-  with_fileglob:
-    - /etc/ssh/ssh_host_*_key
-  when: item is file
+  loop: "{{ ssh_host_keys.files }}"
+  when: ssh_host_keys.files | length > 0
