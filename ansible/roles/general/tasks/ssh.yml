@@ -1,0 +1,68 @@
+---
+- name: SSH - Ensure SSH is installed
+  ansible.builtin.apt:
+    name: openssh-server
+    state: present
+    update_cache: true
+  retries: 3
+  delay: 5
+
+- name: SSH - Harden SSH configuration
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: /usr/sbin/sshd -t -f %s
+    backup: true
+  loop:
+    - regexp: '^#?PermitRootLogin'
+      line: 'PermitRootLogin no'
+    - regexp: '^#?PasswordAuthentication'
+      line: 'PasswordAuthentication no'
+    - regexp: '^#?PubkeyAuthentication'
+      line: 'PubkeyAuthentication yes'
+    - regexp: '^#?PermitEmptyPasswords'
+      line: 'PermitEmptyPasswords no'
+    - regexp: '^#?X11Forwarding'
+      line: 'X11Forwarding no'
+    - regexp: '^#?MaxAuthTries'
+      line: 'MaxAuthTries 3'
+    - regexp: '^#?ClientAliveInterval'
+      line: 'ClientAliveInterval 300'
+    - regexp: '^#?ClientAliveCountMax'
+      line: 'ClientAliveCountMax 2'
+    - regexp: '^#?LoginGraceTime'
+      line: 'LoginGraceTime 60'
+    - regexp: '^#?Protocol'
+      line: 'Protocol 2'
+    - regexp: '^#?StrictModes'
+      line: 'StrictModes yes'
+    - regexp: '^#?IgnoreRhosts'
+      line: 'IgnoreRhosts yes'
+    - regexp: '^#?HostbasedAuthentication'
+      line: 'HostbasedAuthentication no'
+    - regexp: '^#?UsePAM'
+      line: 'UsePAM yes'
+    - regexp: '^#?AllowAgentForwarding'
+      line: 'AllowAgentForwarding no'
+    - regexp: '^#?AllowTcpForwarding'
+      line: 'AllowTcpForwarding no'
+  notify: Restart sshd
+
+- name: SSH - Set secure permissions on SSH config
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: SSH - Ensure SSH host keys have correct permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: '0600'
+  with_fileglob:
+    - /etc/ssh/ssh_host_*_key
+  when: item is file

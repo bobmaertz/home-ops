@@ -3,10 +3,26 @@
   ansible.builtin.import_tasks: packages.yml
   become: true
 
-- name: Secure Server
+- name: Configure automatic security updates
+  ansible.builtin.import_tasks: auto_updates.yml
+  become: true
+
+- name: Harden SSH configuration
+  ansible.builtin.import_tasks: ssh.yml
+  become: true
+
+- name: Apply kernel hardening parameters
+  ansible.builtin.import_tasks: sysctl.yml
+  become: true
+
+- name: Configure audit logging
+  ansible.builtin.import_tasks: auditd.yml
+  become: true
+
+- name: Configure intrusion detection
   ansible.builtin.import_tasks: fail2ban.yml
   become: true
 
-- name: Firewall Setup
+- name: Configure firewall
   ansible.builtin.import_tasks: ufw.yml
   become: true
