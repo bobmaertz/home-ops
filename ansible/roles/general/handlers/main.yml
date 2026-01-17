@@ -3,6 +3,7 @@
   ansible.builtin.systemd_service:
     name: ssh
     state: restarted
+  ignore_errors: true  # May fail if SSH is not running
 
 - name: Restart fail2ban
   ansible.builtin.systemd_service:
@@ -21,3 +22,4 @@
 - name: Restart auditd
   ansible.builtin.command: service auditd restart
   changed_when: true
+  ignore_errors: true  # May fail in container environments

@@ -34,8 +34,6 @@
       line: 'ClientAliveCountMax 2'
     - regexp: '^#?LoginGraceTime'
       line: 'LoginGraceTime 60'
-    - regexp: '^#?Protocol'
-      line: 'Protocol 2'
     - regexp: '^#?StrictModes'
       line: 'StrictModes yes'
     - regexp: '^#?IgnoreRhosts'

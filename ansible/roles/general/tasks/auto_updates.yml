@@ -52,3 +52,4 @@
     name: unattended-upgrades
     enabled: true
     state: started
+  ignore_errors: true  # Service may not exist or fail to start in containers

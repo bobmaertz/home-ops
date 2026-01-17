@@ -123,3 +123,4 @@
     name: auditd
     enabled: true
     state: started
+  ignore_errors: true  # May fail in container environments
