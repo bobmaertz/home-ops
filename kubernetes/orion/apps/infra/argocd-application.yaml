@@ -20,6 +20,8 @@ spec:
               server.insecure: "true"
           notifications:
             enabled: true
+            context:
+              argocdUrl: $argocd-url
             notifiers:
               service.webhook.discord: |
                 url: $discord-webhook-url
@@ -30,12 +32,72 @@ spec:
               trigger.on-app-health-degraded: |
                 - when: app.status.health.status == 'Degraded'
                   send: [app-health-degraded]
+              trigger.on-app-sync-failed: |
+                - when: app.status.operationState.phase in ['Error', 'Failed']
+                  send: [app-sync-failed]
+              trigger.on-app-synced: |
+                - when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+                  send: [app-synced]
             subscriptions:
             - recipients:
               - discord
               triggers:
                 - on-app-health-degraded
+                - on-app-sync-failed
+                - on-app-synced
             templates:
+              template.app-sync-failed: |
+                webhook:
+                  discord:
+                    method: POST
+                    body: |
+                      {
+                        "embeds": [
+                          {
+                            "title": "Sync failed: {{.app.metadata.name}}",
+                            "color": 15158332,
+                            "url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+                            "fields": [
+                              {
+                                "name": "Phase",
+                                "value": "{{.app.status.operationState.phase}}",
+                                "inline": true
+                              },
+                              {
+                                "name": "Message",
+                                "value": "{{.app.status.operationState.message}}",
+                                "inline": false
+                              }
+                            ]
+                          }
+                        ]
+                      }
+              template.app-synced: |
+                webhook:
+                  discord:
+                    method: POST
+                    body: |
+                      {
+                        "embeds": [
+                          {
+                            "title": "Deployed: {{.app.metadata.name}}",
+                            "color": 3066993,
+                            "url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+                            "fields": [
+                              {
+                                "name": "Sync Status",
+                                "value": "{{.app.status.sync.status}}",
+                                "inline": true
+                              },
+                              {
+                                "name": "Revision",
+                                "value": "{{.app.status.sync.revision}}",
+                                "inline": true
+                              }
+                            ]
+                          }
+                        ]
+                      }
               template.app-health-degraded: |
                 webhook:
                   discord:
@@ -50,19 +112,19 @@ spec:
                               {
                                 "name": "Health Status",
                                 "value": "{{.app.status.health.status}}",
-                                "inline": "true"
+                                "inline": true
                               },
                               {
                                 "name": "Repository",
-                                "value": "{{.app.spec.source.repoURL}}",
-                                "inline": "false"
+                                "value": "{{(index .app.spec.sources 1).repoURL}}",
+                                "inline": false
                               }
                               {{range $index, $c := .app.status.conditions}}
                               {{if $index}},{{end}}
                               {
                                 "name": "{{$c.type}}",
                                 "value": "{{$c.message}}",
-                                "inline": "true"
+                                "inline": true
                               }
                               {{end}}
                             ]
