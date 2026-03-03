@@ -40,11 +40,13 @@ spec:
               receivers:
                 - name: discord
                   discord_configs:
-                    - webhook_url: ${DISCORD_WEBHOOK_URL}
+                    - webhook_url: "${DISCORD_WEBHOOK_URL}"
                       title: "[{{ .Status | toUpper }}] {{ .GroupLabels.alertname }}"
           nodeExporter:
             enabled: false
           server:
+            retention: "90d"
+            retentionSize: "28GB"
             persistentVolume:
               enabled: true
               storageClass: "longhorn"
