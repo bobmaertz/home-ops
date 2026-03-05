@@ -45,7 +45,7 @@ spec:
           value: "1000" 
         - name: TZ
           value: America/New_York       
-        image: jellyfin/jellyfin:10.11.5
+        image: jellyfin/jellyfin:10.11.6
         imagePullPolicy: IfNotPresent
         name: jellyfin
         ports:
