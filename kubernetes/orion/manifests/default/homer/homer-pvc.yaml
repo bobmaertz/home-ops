@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: heimdall-pvc-config
-  namespace: heimdall
+  name: homer-pvc-assets
+  namespace: homer
 spec:
   storageClassName: ""
-  volumeName: heimdall-pv-nfs-config
+  volumeName: homer-pv-nfs-assets
   accessModes:
     - ReadWriteMany
   volumeMode: Filesystem

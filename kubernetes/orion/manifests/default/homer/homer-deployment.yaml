@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: heimdall
-  name: heimdall
-  namespace: heimdall
+    app: homer
+  name: homer
+  namespace: homer
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -15,56 +15,52 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: heimdall
+      app: homer
   template:
     metadata:
       labels:
-        app: heimdall
+        app: homer
     spec:
-      # lscr.io/linuxserver/heimdall uses s6-overlay which requires root to bootstrap.
-      # runAsNonRoot is not achievable with this image; all other available hardening is applied.
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       volumes:
-        - name: heimdall-config
+        - name: homer-assets
           persistentVolumeClaim:
-            claimName: heimdall-pvc-config
+            claimName: homer-pvc-assets
         - name: tmp
           emptyDir: {}
       containers:
-        - name: heimdall
-          image: lscr.io/linuxserver/heimdall:2.6.3
+        - name: homer
+          image: ghcr.io/bastienwirtz/homer:latest
           imagePullPolicy: IfNotPresent
           env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
             - name: TZ
               value: America/New_York
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
               protocol: TCP
           resources:
             limits:
-              cpu: "500m"
-              memory: "256Mi"
+              cpu: "200m"
+              memory: "64Mi"
             requests:
-              cpu: "100m"
-              memory: "128Mi"
+              cpu: "50m"
+              memory: "32Mi"
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
-              add:
-                - SETUID
-                - SETGID
           volumeMounts:
-            - mountPath: /config
-              name: heimdall-config
+            - mountPath: /www/assets
+              name: homer-assets
             - mountPath: /tmp
               name: tmp
       dnsPolicy: ClusterFirst
