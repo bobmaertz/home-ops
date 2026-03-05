@@ -1,0 +1,24 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "timezone": "America/New_York",
+  "schedule": ["every monday"],
+  "kubernetes": {
+    "fileMatch": ["kubernetes/.+\\.ya?ml$"]
+  },
+  "argocd": {
+    "fileMatch": ["kubernetes/orion/apps/.+\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["kubernetes"],
+      "labels": ["dependencies", "docker"],
+      "commitMessagePrefix": "chore(deps)"
+    },
+    {
+      "matchManagers": ["argocd"],
+      "labels": ["dependencies", "helm"],
+      "commitMessagePrefix": "chore(deps)"
+    }
+  ]
+}
