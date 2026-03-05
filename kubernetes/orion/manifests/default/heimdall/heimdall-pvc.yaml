@@ -4,9 +4,10 @@ metadata:
   name: heimdall-pvc-config
   namespace: heimdall
 spec:
-  storageClassName: longhorn
+  storageClassName: ""
+  volumeName: heimdall-pv-nfs-config
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   volumeMode: Filesystem
   resources:
     requests:

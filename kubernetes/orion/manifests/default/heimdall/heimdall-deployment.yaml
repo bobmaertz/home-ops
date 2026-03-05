@@ -21,6 +21,11 @@ spec:
       labels:
         app: heimdall
     spec:
+      # lscr.io/linuxserver/heimdall uses s6-overlay which requires root to bootstrap.
+      # runAsNonRoot is not achievable with this image; all other available hardening is applied.
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
         - name: heimdall-config
           persistentVolumeClaim:
@@ -49,6 +54,14 @@ spec:
             requests:
               cpu: "100m"
               memory: "128Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - SETUID
+                - SETGID
           volumeMounts:
             - mountPath: /config
               name: heimdall-config
