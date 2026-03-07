@@ -1,0 +1,34 @@
+---
+# Deny all traffic to the registry by default, then explicitly allow
+# only the Istio ingress gateway and the runner namespace.
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: registry-deny-all
+  namespace: registry
+spec:
+  action: DENY
+  rules:
+    - from:
+        - source:
+            # Block any principal that is NOT from istio-ingress or actions-runner.
+            # Istio encodes workload identity as spiffe://<cluster>/ns/<ns>/sa/<sa>.
+            notNamespaces:
+              - istio-ingress
+              - actions-runner
+              - registry
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: registry-allow-ingress
+  namespace: registry
+spec:
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            namespaces:
+              - istio-ingress
+              - actions-runner
+              - registry

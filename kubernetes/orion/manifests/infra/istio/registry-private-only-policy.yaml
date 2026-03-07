@@ -1,0 +1,22 @@
+---
+# Deny requests to registry.bou1der.net that originate from outside
+# private network ranges. This is enforced at the Istio ingress gateway
+# so non-private clients are rejected before reaching the registry service.
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: registry-private-only
+  namespace: istio-ingress
+spec:
+  action: DENY
+  rules:
+    - to:
+        - operation:
+            hosts:
+              - "registry.bou1der.net"
+      from:
+        - source:
+            notRemoteIpBlocks:
+              - "192.168.0.0/16"
+              - "10.0.0.0/8"
+              - "172.16.0.0/12"
