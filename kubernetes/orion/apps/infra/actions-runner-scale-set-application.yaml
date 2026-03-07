@@ -21,33 +21,24 @@ spec:
         minRunners: 0
         maxRunners: 2
         runnerScaleSetName: "self-hosted-orion"
-        containerMode:
-          type: dind
         template:
           spec:
-            # Prevent workflows from querying the K8s API or reading other secrets.
+            # No K8s API access from within workflow jobs.
             automountServiceAccountToken: false
+            # Pull the custom runner image from the private registry.
+            imagePullSecrets:
+              - name: registry-pull-secret
             containers:
               - name: runner
-                image: ghcr.io/actions/actions-runner:latest
+                image: registry.bou1der.net/infra/actions-runner:latest
                 command: ["/home/runner/run.sh"]
+                # Kaniko requires uid 0 to unpack filesystem layers.
+                # allowPrivilegeEscalation: false prevents any suid/sgid escalation.
+                # privileged: true is NOT set — this is root-in-container only.
                 securityContext:
                   allowPrivilegeEscalation: false
-                  runAsNonRoot: true
-                  runAsUser: 1001
-                resources:
-                  requests:
-                    cpu: "500m"
-                    memory: "1Gi"
-                  limits:
-                    cpu: "2"
-                    memory: "4Gi"
-              # DinD sidecar: privileged is required for Docker builds.
-              # Limits prevent a runaway build from exhausting node resources.
-              - name: dind
-                image: docker:dind
-                securityContext:
-                  privileged: true
+                  runAsNonRoot: false
+                  runAsUser: 0
                 resources:
                   requests:
                     cpu: "500m"
@@ -55,9 +46,6 @@ spec:
                   limits:
                     cpu: "4"
                     memory: "8Gi"
-                env:
-                  - name: DOCKER_TLS_CERTDIR
-                    value: ""
   syncPolicy:
     automated:
       prune: true
