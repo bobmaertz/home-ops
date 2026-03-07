@@ -1,0 +1,108 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: act-runner
+  namespace: gitea-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: act-runner
+  template:
+    metadata:
+      labels:
+        app: act-runner
+    spec:
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: registry-pull-secret
+      containers:
+        - name: runner
+          image: gitea/act_runner:latest
+          env:
+            - name: GITEA_INSTANCE_URL
+              value: "https://gitea.bou1der.net"
+            - name: GITEA_RUNNER_REGISTRATION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-runner-token
+                  key: token
+            - name: GITEA_RUNNER_NAME
+              value: "orion-runner"
+            - name: GITEA_RUNNER_LABELS
+              value: "self-hosted,linux,amd64"
+            - name: CONFIG_FILE
+              value: /config/config.yaml
+          volumeMounts:
+            - name: runner-config
+              mountPath: /config
+            - name: runner-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            runAsUser: 1000
+      volumes:
+        - name: runner-config
+          configMap:
+            name: act-runner-config
+        - name: runner-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: act-runner-config
+  namespace: gitea-runner
+data:
+  config.yaml: |
+    log:
+      level: info
+    runner:
+      capacity: 2
+      timeout: 3h
+      insecure: false
+    cache:
+      enabled: true
+      dir: /data/cache
+    container:
+      network: bridge
+      privileged: false
+      valid_volumes:
+        - /tmp
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: registry-pull-secret
+  namespace: gitea-runner
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: cluster-secret-store
+  target:
+    name: registry-pull-secret
+    template:
+      type: kubernetes.io/dockerconfigjson
+      data:
+        .dockerconfigjson: |
+          {
+            "auths": {
+              "registry.bou1der.net": {
+                "auth": "{{ .auth | b64enc }}"
+              }
+            }
+          }
+  data:
+    - secretKey: auth
+      remoteRef:
+        key: "registry_pull_secret"
+        property: credential

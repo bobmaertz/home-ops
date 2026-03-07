@@ -1,0 +1,75 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitea
+  namespace: argocd
+spec:
+  destination:
+    namespace: gitea
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - repoURL: 'https://dl.gitea.com/charts/'
+    chart: gitea
+    targetRevision: 10.6.0
+    helm:
+      releaseName: gitea
+      values: |
+        replicaCount: 1
+
+        gitea:
+          admin:
+            existingSecret: gitea-admin
+
+          config:
+            database:
+              DB_TYPE: sqlite3
+            server:
+              DOMAIN: gitea.bou1der.net
+              ROOT_URL: https://gitea.bou1der.net
+              SSH_DOMAIN: gitea.bou1der.net
+              SSH_PORT: 22
+              START_SSH_SERVER: false
+            repository:
+              DEFAULT_BRANCH: main
+
+        persistence:
+          enabled: true
+          existingClaim: gitea-data
+
+        # Disable bundled postgres — use sqlite3
+        postgresql-ha:
+          enabled: false
+        postgresql:
+          enabled: false
+
+        service:
+          http:
+            type: ClusterIP
+            port: 3000
+          ssh:
+            type: LoadBalancer
+            port: 22
+            annotations:
+              metallb.universe.tf/loadBalancerIPs: ""
+
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+
+  - repoURL: 'https://github.com/bobmaertz/home-ops.git'
+    targetRevision: HEAD
+    path: kubernetes/orion/manifests/infra/gitea/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
