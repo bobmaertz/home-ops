@@ -1,0 +1,46 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: actions-runner-scale-set
+  namespace: argocd
+spec:
+  destination:
+    namespace: actions-runner
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - repoURL: 'ghcr.io/actions/actions-runner-controller-charts'
+    chart: gha-runner-scale-set
+    targetRevision: 0.9.3
+    helm:
+      releaseName: orion-runner-set
+      values: |
+        githubConfigUrl: "https://github.com/bobmaertz"
+        githubConfigSecret: arc-github-pat
+        minRunners: 0
+        maxRunners: 2
+        runnerScaleSetName: "self-hosted-orion"
+        containerMode:
+          type: dind
+        template:
+          spec:
+            containers:
+              - name: runner
+                image: ghcr.io/actions/actions-runner:latest
+                command: ["/home/runner/run.sh"]
+                resources:
+                  requests:
+                    cpu: "500m"
+                    memory: "1Gi"
+                  limits:
+                    cpu: "2"
+                    memory: "4Gi"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
