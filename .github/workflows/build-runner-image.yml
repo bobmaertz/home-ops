@@ -1,0 +1,39 @@
+name: Build runner image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - docker/actions-runner/Dockerfile
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted-orion
+    steps:
+      - uses: actions/checkout@v4
+
+      # After bootstrap the runner itself has Kaniko — use it to build
+      # subsequent versions of the runner image (self-hosting the build).
+      - name: Write registry credentials
+        env:
+          REGISTRY: registry.bou1der.net
+          USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+        run: |
+          mkdir -p /kaniko/.docker
+          printf '{"auths":{"%s":{"auth":"%s"}}}' \
+            "${REGISTRY}" \
+            "$(printf '%s:%s' "${USERNAME}" "${PASSWORD}" | base64 -w 0)" \
+            > /kaniko/.docker/config.json
+
+      - name: Build and push runner image
+        run: |
+          /kaniko/executor \
+            --context=dir://${{ github.workspace }}/docker/actions-runner \
+            --dockerfile=${{ github.workspace }}/docker/actions-runner/Dockerfile \
+            --destination=registry.bou1der.net/infra/actions-runner:${{ github.sha }} \
+            --destination=registry.bou1der.net/infra/actions-runner:latest \
+            --cache=true \
+            --cache-repo=registry.bou1der.net/infra/actions-runner:buildcache \
+            --push-retry=3

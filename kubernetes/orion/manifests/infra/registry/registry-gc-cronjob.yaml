@@ -1,0 +1,51 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: registry-gc
+  namespace: registry
+spec:
+  schedule: "0 3 * * 0"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          containers:
+            - name: registry-gc
+              image: registry:2
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/registry
+                - garbage-collect
+                - /etc/docker/registry/config.yml
+                - --delete-untagged=true
+              resources:
+                requests:
+                  cpu: "100m"
+                  memory: "128Mi"
+                limits:
+                  cpu: "500m"
+                  memory: "256Mi"
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                runAsNonRoot: true
+                readOnlyRootFilesystem: true
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - name: registry-data
+                  mountPath: /var/lib/registry
+          volumes:
+            - name: registry-data
+              persistentVolumeClaim:
+                claimName: registry-data
