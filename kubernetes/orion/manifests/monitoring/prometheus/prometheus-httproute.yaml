@@ -21,5 +21,8 @@ spec:
           type: ReplacePrefixMatch
           replacePrefixMatch: /
     backendRefs:
-    - name: prometheus-server  # service name set by helm chart
+    - group: ''
+      kind: Service
+      name: prometheus-server  # service name set by helm chart
       port: 80
+      weight: 1
