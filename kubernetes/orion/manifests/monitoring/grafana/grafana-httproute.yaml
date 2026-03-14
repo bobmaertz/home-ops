@@ -10,8 +10,8 @@ spec:
   hostnames:
   - "grafana.bou1der.net"
   rules:
-  - path:
-    - host:
+  - matches:
+    - path:
         type: PathPrefix
         value: /
     filters:
