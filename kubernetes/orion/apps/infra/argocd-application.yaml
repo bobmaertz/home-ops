@@ -20,7 +20,6 @@ spec:
               server.insecure: "true"
             cm:
               accounts.bob: login
-              admin.enabled: "false"
             rbac:
               policy.default: role:admin
           notifications:
