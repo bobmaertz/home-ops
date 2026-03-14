@@ -120,6 +120,12 @@ spec:
     - repoURL: 'https://github.com/bobmaertz/home-ops.git'
       targetRevision: HEAD
       path: kubernetes/orion/manifests/monitoring/prometheus
+  ignoreDifferences:
+  - group: apps
+    kind: StatefulSet
+    jsonPointers:
+    - /spec/volumeClaimTemplates/0/apiVersion
+    - /spec/volumeClaimTemplates/0/kind
   syncPolicy:
     automated:
       prune: true

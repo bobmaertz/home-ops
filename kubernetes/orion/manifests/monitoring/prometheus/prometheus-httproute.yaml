@@ -5,7 +5,9 @@ metadata:
   namespace: prometheus
 spec:
   parentRefs:
-  - name: default-gateway
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: default-gateway
     namespace: istio-ingress
   hostnames:
   - "prometheus.bou1der.net"
