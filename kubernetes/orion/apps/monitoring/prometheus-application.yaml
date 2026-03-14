@@ -121,4 +121,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - PruneLast=true
-      - Replace=true
+      - ServerSideApply=true
