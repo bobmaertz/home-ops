@@ -19,6 +19,12 @@ spec:
             enabled: true
             image:
               tag: v0.28.0
+            persistentVolume:
+              enabled: true
+              storageClass: "longhorn"
+              size: 2Gi
+              accessModes:
+                - ReadWriteOnce
             extraVolumes:
               - name: discord-webhook
                 secret:
