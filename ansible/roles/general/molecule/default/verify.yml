@@ -9,6 +9,13 @@
           - vim
           - zsh
           - qemu-guest-agent
+          - aide
+          - aide-common
+          - libpam-pwquality
+          - libpam-tmpdir
+          - needrestart
+          - debsums
+          - apt-show-versions
         state: present
       check_mode: true
       register: package_check
@@ -103,4 +110,88 @@
       register: fail2ban_config
       changed_when: false
       failed_when: fail2ban_config.stdout == ""
+      ignore_errors: true
+
+    # SSH Hardening Validation
+    - name: Verify SSH hardening - PermitRootLogin disabled
+      ansible.builtin.shell: grep "^PermitRootLogin no" /etc/ssh/sshd_config
+      register: ssh_root_login
+      changed_when: false
+      failed_when: ssh_root_login.rc != 0
+      ignore_errors: true
+
+    - name: Verify SSH hardening - PasswordAuthentication disabled
+      ansible.builtin.shell: grep "^PasswordAuthentication no" /etc/ssh/sshd_config
+      register: ssh_password_auth
+      changed_when: false
+      failed_when: ssh_password_auth.rc != 0
+      ignore_errors: true
+
+    - name: Verify SSH config permissions
+      ansible.builtin.stat:
+        path: /etc/ssh/sshd_config
+      register: sshd_config_stat
+      failed_when: sshd_config_stat.stat.mode != '0600'
+      ignore_errors: true
+
+    # Sysctl Hardening Validation
+    - name: Verify sysctl hardening file exists
+      ansible.builtin.stat:
+        path: /etc/sysctl.d/99-security-hardening.conf
+      register: sysctl_hardening
+      failed_when: not sysctl_hardening.stat.exists
+      ignore_errors: true
+
+    - name: Verify IP forwarding is disabled
+      ansible.builtin.shell: sysctl net.ipv4.conf.all.send_redirects 2>/dev/null | grep "= 0"
+      register: ip_forward
+      changed_when: false
+      ignore_errors: true
+
+    # Automatic Updates Validation
+    - name: Verify unattended-upgrades is installed
+      ansible.builtin.package:
+        name: unattended-upgrades
+        state: present
+      check_mode: true
+      register: unattended_upgrades_check
+      failed_when: unattended_upgrades_check.changed
+      ignore_errors: true
+
+    - name: Verify unattended-upgrades configuration exists
+      ansible.builtin.stat:
+        path: /etc/apt/apt.conf.d/50unattended-upgrades
+      register: unattended_config
+      failed_when: not unattended_config.stat.exists
+      ignore_errors: true
+
+    - name: Verify auto-upgrades configuration exists
+      ansible.builtin.stat:
+        path: /etc/apt/apt.conf.d/20auto-upgrades
+      register: auto_upgrades_config
+      failed_when: not auto_upgrades_config.stat.exists
+      ignore_errors: true
+
+    # Auditd Validation
+    - name: Verify auditd is installed
+      ansible.builtin.package:
+        name: auditd
+        state: present
+      check_mode: true
+      register: auditd_check
+      failed_when: auditd_check.changed
+      ignore_errors: true
+
+    - name: Verify auditd rules exist
+      ansible.builtin.stat:
+        path: /etc/audit/rules.d/hardening.rules
+      register: audit_rules
+      failed_when: not audit_rules.stat.exists
+      ignore_errors: true
+
+    - name: Verify fail2ban jail.local exists
+      ansible.builtin.stat:
+        path: /etc/fail2ban/jail.local
+      register: fail2ban_local
+      failed_when: not fail2ban_local.stat.exists
       ignore_errors: true

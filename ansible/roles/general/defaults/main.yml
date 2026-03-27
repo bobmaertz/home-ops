@@ -4,3 +4,10 @@ general_packages:
   - vim
   - zsh
   - qemu-guest-agent
+  - aide
+  - aide-common
+  - libpam-pwquality
+  - libpam-tmpdir
+  - needrestart
+  - debsums
+  - apt-show-versions

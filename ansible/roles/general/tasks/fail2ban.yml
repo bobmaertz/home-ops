@@ -8,3 +8,47 @@
     update_cache: true
   retries: 3
   delay: 5
+
+- name: Configure fail2ban local jail
+  ansible.builtin.copy:
+    dest: /etc/fail2ban/jail.local
+    content: |
+      [DEFAULT]
+      # Ban hosts for 1 hour
+      bantime = 3600
+      # Check for failures in the last 10 minutes
+      findtime = 600
+      # Allow 5 retries before banning
+      maxretry = 5
+      # Ignore localhost
+      ignoreip = 127.0.0.1/8 ::1
+      # Ban action
+      banaction = iptables-multiport
+      # Email settings (adjust as needed)
+      destemail = root@localhost
+      sendername = Fail2Ban
+      action = %(action_mw)s
+
+      [sshd]
+      enabled = true
+      port = ssh
+      logpath = %(sshd_log)s
+      maxretry = 3
+      bantime = 7200
+
+      [sshd-ddos]
+      enabled = true
+      port = ssh
+      logpath = %(sshd_log)s
+      maxretry = 10
+      findtime = 60
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart fail2ban
+
+- name: Ensure fail2ban is enabled and started
+  ansible.builtin.systemd_service:
+    name: fail2ban
+    enabled: true
+    state: started
