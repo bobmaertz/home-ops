@@ -1,0 +1,26 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: gitea-route
+  namespace: gitea
+spec:
+  parentRefs:
+  - name: default-gateway
+    namespace: istio-ingress
+  hostnames:
+  - "gitea.bou1der.net"
+  rules:
+  - path:
+    - host:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: URLRewrite
+      urlRewrite:
+        path:
+          type: ReplacePrefixMatch
+          replacePrefixMatch: /
+    backendRefs:
+    - name: gitea-http
+      port: 3000

@@ -6,13 +6,59 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: registry 
+    namespace: registry
     server: https://kubernetes.default.svc
   project: default
   sources:
-  - repoURL: 'https://github.com/bobmaertz/registry.git'
-    targetRevision: HEAD
-    path: .
+  - repoURL: 'https://helm.twun.io'
+    chart: docker-registry
+    targetRevision: 2.2.3
+    helm:
+      releaseName: registry
+      values: |
+        replicaCount: 1
+        persistence:
+          enabled: true
+          existingClaim: registry-data
+        secrets:
+          htpasswd: ""
+        configData:
+          version: 0.1
+          log:
+            fields:
+              service: registry
+          storage:
+            cache:
+              blobdescriptor: inmemory
+            filesystem:
+              rootdirectory: /var/lib/registry
+            delete:
+              enabled: true
+          http:
+            addr: :5000
+            headers:
+              X-Content-Type-Options: [nosniff]
+          auth:
+            htpasswd:
+              realm: basic-realm
+              path: /auth/htpasswd
+          health:
+            storagedriver:
+              enabled: true
+              interval: 10s
+              threshold: 3
+        extraVolumes:
+          - name: auth
+            secret:
+              secretName: registry-htpasswd
+        extraVolumeMounts:
+          - name: auth
+            mountPath: /auth
+            readOnly: true
+        service:
+          type: ClusterIP
+          port: 80
+          targetPort: 5000
   - repoURL: 'https://github.com/bobmaertz/home-ops.git'
     targetRevision: HEAD
     path: kubernetes/orion/manifests/infra/registry/
